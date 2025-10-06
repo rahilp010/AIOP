@@ -111,10 +111,6 @@ const FancyFontGenerator = () => {
                   <div
                      key={name}
                      className="group relative bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-md hover:shadow-lg overflow-hidden">
-                     {/* Trending Badge
-                     {index < 3 && ( // 👈 show badge for first 3 styles (you can change condition)
-                       
-                     )} */}
 
                      <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -124,9 +120,11 @@ const FancyFontGenerator = () => {
                            <div className="flex-1 min-w-0">
                               <div className="text-xs flex gap-3 items-center text-gray-500 mb-1 font-medium uppercase tracking-wider">
                                  <span>{name}</span>
-                                 <span className="rounded-4xl px-4 py-1 text-center  bg-red-500/10 backdrop-blur-md border border-red-500/20 text-red-500 text-xs font-semibold shadow-md">
-                                    TRENDING
-                                 </span>
+                                 {index < 3 && (
+                                    <span className="rounded-4xl px-4 py-1 text-center  bg-red-500/10 backdrop-blur-md border border-red-500/20 text-red-500 text-xs font-semibold shadow-md">
+                                       TRENDING
+                                    </span>
+                                 )}
                               </div>
                               <div className="text-white text-lg break-words">
                                  {styledText}
