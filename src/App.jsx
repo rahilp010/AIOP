@@ -1,6 +1,8 @@
+import EmojiCopy from './components/EmojiGenerator/EmojiCopy';
 import FancyFontGenerator from './components/FanceyFont/FanceyFontGenerarot';
-import Navbar from './components/Navbar';
+import HeroPage from './components/HeroPage';
 import { ToastContainer, Zoom } from 'react-toastify';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
    return (
@@ -18,8 +20,11 @@ function App() {
             theme="dark"
             transition={Zoom}
          />
-         {/* <Navbar /> */}
-         <FancyFontGenerator />
+         <Routes>
+            <Route path="/" element={<HeroPage />} />
+            <Route path="/emoji-generator" element={<EmojiCopy />} />
+            <Route path="/font-generator" element={<FancyFontGenerator />} />
+         </Routes>
       </>
    );
 }
