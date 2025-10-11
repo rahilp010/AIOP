@@ -63,8 +63,8 @@ const EmojiCopy = () => {
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
          </div>
          <ToastContainer />
-         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-yellow-400 relative z-10 animate-fade-in-down">
-            🌟 Emoji Browser
+         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative z-10 animate-fade-in-down">
+            Emoji Browser
          </h1>
 
          {/* Tabs */}
