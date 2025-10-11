@@ -99,7 +99,7 @@ const EmojiCopy = () => {
                      key={i}
                      title={emoji.name}
                      onClick={() => handleCopy(emoji.char)}
-                     className="aspect-square flex items-center justify-center text-4xl sm:text-5xl bg-white/5 hover:bg-white/20 active:bg-white/30 rounded-2xl transition-all duration-300 ease-out hover:scale-110 hover:rotate-3 active:scale-95 shadow-md hover:shadow-lg hover:shadow-yellow-500/20 border border-white/10 min-h-[4rem] sm:min-h-[5rem] relative overflow-hidden group">
+                     className="aspect-square flex items-center justify-center text-2xl sm:text-5xl bg-white/5 hover:bg-white/20 active:bg-white/30 rounded-2xl transition-all duration-300 ease-out hover:scale-110 hover:rotate-3 active:scale-95 shadow-md hover:shadow-lg hover:shadow-yellow-500/20 border border-white/10 min-h-[4rem] sm:min-h-[5rem] relative overflow-hidden group">
                      <span className="transition-transform duration-300 group-hover:scale-110">
                         {emoji.char}
                      </span>

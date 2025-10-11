@@ -79,9 +79,7 @@ const FancyFontGenerator = () => {
    }, [favorites]);
 
    return (
-      <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-black text-white relative overflow-auto">
-         <div className="absolute inset-0 bg-gradient-to-b from-neutral-900 to-black opacity-95"></div>
-
+      <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-auto customScrollbar">
          <div className="relative z-10 text-center mb-12">
             <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
                Fancy Font Generator
