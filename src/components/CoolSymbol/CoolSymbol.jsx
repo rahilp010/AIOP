@@ -84,31 +84,31 @@ const CoolSymbol = () => {
    };
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-auto h-screen customScrollbar">
          {/* Background animation */}
          <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
          </div>
 
          {/* Custom Toast Container */}
-         <div className="fixed bottom-6 right-6 z-50 space-y-3 max-w-sm w-full pointer-events-none">
+         <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 space-y-3 max-w-[calc(100vw-2rem)] sm:max-w-sm w-full pointer-events-none">
             {toasts.map((toast) => (
                <div
                   key={toast.id}
                   className="toast-slide-up pointer-events-auto">
-                  <div className="relative backdrop-blur-xl bg-gradient-to-r from-emerald-500/90 to-green-600/90 border border-emerald-400/50 rounded-2xl shadow-2xl overflow-hidden">
+                  <div className="relative backdrop-blur-xl bg-gradient-to-r from-emerald-500/90 to-green-600/90 border border-emerald-400/50 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
                      {/* Progress Bar */}
                      <div className="absolute bottom-0 left-0 h-1 bg-white/30 w-full">
                         <div className="h-full bg-white/60 toast-progress"></div>
                      </div>
                      
-                     <div className="p-4 pr-12">
-                        <div className="flex items-center space-x-3">
-                           <div className="text-white text-2xl flex-shrink-0">
+                     <div className="p-3 sm:p-4 pr-10 sm:pr-12">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
+                           <div className="text-white text-xl sm:text-2xl flex-shrink-0">
                               {toast.symbol}
                            </div>
                            <div className="flex-1 min-w-0">
-                              <p className="text-white font-medium text-sm">
+                              <p className="text-white font-medium text-xs sm:text-sm">
                                  {toast.message}
                               </p>
                            </div>
@@ -117,8 +117,8 @@ const CoolSymbol = () => {
 
                      <button
                         onClick={() => removeToast(toast.id)}
-                        className="absolute top-3 right-3 text-white/80 hover:text-white transition-colors duration-200">
-                        <X size={18} />
+                        className="absolute top-2 sm:top-3 right-2 sm:right-3 text-white/80 hover:text-white transition-colors duration-200">
+                        <X size={16} className="sm:w-[18px] sm:h-[18px]" />
                      </button>
                   </div>
                </div>
@@ -146,7 +146,7 @@ const CoolSymbol = () => {
          </div>
 
          {/* Symbol Grid */}
-         <div className="max-w-6xl mx-auto p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg shadow-2xl shadow-black/20 animate-fade-in">
+         <div className="max-w-6xl mx-auto p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg shadow-2xl shadow-black/20 animate-fade-in  overflow-y-auto customScrollbar h-[75vh]">
             <h2 className="text-2xl font-semibold mb-6 text-yellow-400">
                {symbolCategories[activeCategory].title}
             </h2>
@@ -215,6 +215,30 @@ const CoolSymbol = () => {
             }
             .toast-progress {
                animation: progress 2s linear;
+            }
+            
+            /* Custom Scrollbar */
+            .custom-scrollbar::-webkit-scrollbar {
+               width: 8px;
+               height: 8px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+               background: rgba(255, 255, 255, 0.05);
+               border-radius: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+               background: rgba(251, 191, 36, 0.5);
+               border-radius: 10px;
+               transition: background 0.3s;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+               background: rgba(251, 191, 36, 0.8);
+            }
+            
+            /* Firefox */
+            .custom-scrollbar {
+               scrollbar-width: thin;
+               scrollbar-color: rgba(251, 191, 36, 0.5) rgba(255, 255, 255, 0.05);
             }
          `}</style>
       </div>

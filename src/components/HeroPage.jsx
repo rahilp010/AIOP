@@ -20,15 +20,15 @@ const HeroPage = () => {
    const TAB_BUTTONS = [
       {
          title: 'Font Generator',
-         path: '/font-generator',
+         path: '/fontgenerator',
       },
       {
          title: 'Emoji Generator',
-         path: '/emoji-generator',
+         path: '/emojigenerator',
       },
       {
          title: 'Cool Symbol',
-         path: '/cool-symbol',
+         path: '/symbol',
       },
    ];
 
