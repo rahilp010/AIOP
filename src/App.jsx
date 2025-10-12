@@ -3,6 +3,7 @@ import FancyFontGenerator from './components/FanceyFont/FanceyFontGenerarot';
 import HeroPage from './components/HeroPage';
 import { ToastContainer, Zoom } from 'react-toastify';
 import { Routes, Route } from 'react-router-dom';
+import CoolSymbol from './components/CoolSymbol/CoolSymbol';
 
 function App() {
    return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<HeroPage />} />
             <Route path="/emoji-generator" element={<EmojiCopy />} />
             <Route path="/font-generator" element={<FancyFontGenerator />} />
+            <Route path="/cool-symbol" element={<CoolSymbol />} />
          </Routes>
       </>
    );

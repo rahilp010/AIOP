@@ -26,6 +26,10 @@ const HeroPage = () => {
          title: 'Emoji Generator',
          path: '/emoji-generator',
       },
+      {
+         title: 'Cool Symbol',
+         path: '/cool-symbol',
+      },
    ];
 
    return (
