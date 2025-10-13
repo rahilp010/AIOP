@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import emojis from 'emoji-datasource';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Navbar from '../Navbar';
 
 const unifiedToEmoji = (unified) =>
    unified
@@ -58,10 +59,14 @@ const EmojiCopy = () => {
 
    return (
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-auto h-screen customScrollbar">
+         <div className="z-50 mb-10 -mt-2 flex justify-center">
+            <Navbar />
+         </div>
          {/* Background animation */}
-         <div className="absolute inset-0 opacity-20">
+         <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
          </div>
+
          <ToastContainer />
          <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative z-10 animate-fade-in-down">
             Emoji Browser
@@ -73,10 +78,10 @@ const EmojiCopy = () => {
                <button
                   key={cat}
                   onClick={() => setSelectedTab(cat)}
-                  className={`px-6 py-3 rounded-2xl font-medium transition-all duration-300 ease-out relative overflow-hidden group ${
+                  className={`px-6 py-3 rounded-2xl font-medium transition-all duration-300 ease-out relative overflow-hidden group cursor-pointer ${
                      selectedTab === cat
-                        ? 'bg-yellow-400 text-black shadow-xl shadow-yellow-500/25 scale-105 ring-2 ring-yellow-400/50'
-                        : 'bg-white/10 text-white hover:bg-white/20 hover:scale-105 hover:shadow-lg hover:shadow-white/20'
+                        ? 'bg-gradient-to-r from-yellow-500 to-amber-600 text-black'
+                        : 'bg-white/5 hover:bg-white/10 border border-white/10'
                   }`}>
                   <span
                      className={`transition-all duration-300 ${

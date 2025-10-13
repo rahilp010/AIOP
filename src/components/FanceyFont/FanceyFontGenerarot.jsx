@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Copy, Heart } from 'lucide-react';
 import fontMaps from './text';
 import { toast } from 'react-toastify';
+import Navbar from '../Navbar';
 
 const FancyFontGenerator = () => {
    const [inputText, setInputText] = useState('');
@@ -25,20 +26,26 @@ const FancyFontGenerator = () => {
       {
          name: 'Strikethrough',
          icon: 'S̶',
-         transform: (text) =>
-            text
+         transform: (text) => {
+            if (!text) return '';
+            return text
                .split('')
-               .map((c) => c + '\u0336')
-               .join(''),
+               .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0336'))
+               .join('');
+         },
+         previewStyle: { textDecoration: 'line-through' },
       },
       {
          name: 'Underline',
          icon: 'U̲',
-         transform: (text) =>
-            text
+         transform: (text) => {
+            if (!text) return '';
+            return text
                .split('')
-               .map((c) => c + '\u0332')
-               .join(''),
+               .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0331'))
+               .join('');
+         },
+         previewStyle: { textDecoration: 'underline' },
       },
    ];
 
@@ -80,6 +87,9 @@ const FancyFontGenerator = () => {
 
    return (
       <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-auto customScrollbar">
+         <div className="z-50 mb-10 -mt-10 flex justify-center ">
+            <Navbar />
+         </div>
          <div className="relative z-10 text-center mb-12">
             <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
                Fancy Font Generator
@@ -97,7 +107,16 @@ const FancyFontGenerator = () => {
                className="w-full p-5 bg-black/50 border border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-500 resize-none text-white text-lg placeholder-gray-500"
                rows="4"
             />
-            <div className="flex items-center justify-end mt-5">
+            <div className="flex items-center justify-between mt-5">
+               <label className="flex items-center gap-2 text-sm text-gray-400">
+                  <input
+                     type="checkbox"
+                     checked={includeEmojis}
+                     onChange={(e) => setIncludeEmojis(e.target.checked)}
+                     className="rounded"
+                  />
+                  Add emojis
+               </label>
                {inputText && (
                   <button
                      onClick={() => setInputText('')}
@@ -110,8 +129,8 @@ const FancyFontGenerator = () => {
 
          <div className="relative z-10 w-full max-w-3xl grid grid-cols-1 gap-4">
             {sortedTransformations.map(
-               ({ name, icon, mapKey, transform }, index) => {
-                  const styledText = applyEmojis(
+               ({ name, icon, mapKey, transform, previewStyle }, index) => {
+                  const copyText = applyEmojis(
                      getTransform(
                         { name, icon, mapKey, transform },
                         inputText || name
@@ -138,8 +157,12 @@ const FancyFontGenerator = () => {
                                        </span>
                                     )}
                                  </div>
-                                 <div className="text-white text-lg break-words">
-                                    {styledText}
+                                 <div className={`text-white text-lg break-words ${previewStyle ? 'inline' : ''}`}>
+                                    {previewStyle ? (
+                                       <span style={previewStyle}>{copyText.replace(/[\u0336\u0331]/g, '')}</span> // Strip combiners for clean CSS preview
+                                    ) : (
+                                       copyText
+                                    )}
                                  </div>
                               </div>
                            </div>
@@ -152,10 +175,11 @@ const FancyFontGenerator = () => {
                                     : 'text-gray-500 hover:text-red-500'
                               }`}
                               onClick={() => handleFavorite(name)}
+                              fill={isFav ? 'currentColor' : 'none'}
                            />
 
                            <button
-                              onClick={() => handleCopy(styledText, index)}
+                              onClick={() => handleCopy(copyText, index)}
                               className={`shrink-0 px-5 py-2.5 rounded-xl flex items-center gap-2 font-medium transition-all duration-200 shadow ${
                                  isCopied
                                     ? 'bg-gray-700 text-white'

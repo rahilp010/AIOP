@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle, X } from 'lucide-react';
+import Navbar from '../Navbar';
 
 const symbolCategories = [
   {
@@ -85,6 +86,10 @@ const CoolSymbol = () => {
 
    return (
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-auto h-screen customScrollbar">
+       
+      <div className='z-50 mb-10 -mt-2 flex justify-center '>
+          <Navbar/>
+      </div>
          {/* Background animation */}
          <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
@@ -135,7 +140,7 @@ const CoolSymbol = () => {
                <button
                   key={cat.title}
                   onClick={() => setActiveCategory(idx)}
-                  className={`px-6 py-3 rounded-2xl font-medium transition-all duration-300 ease-out relative overflow-hidden group ${
+                  className={`px-6 py-3 rounded-2xl font-medium transition-all duration-300 ease-out relative overflow-hidden group cursor-pointer ${
                      activeCategory === idx 
                         ? 'bg-gradient-to-r from-yellow-500 to-amber-600 text-black' 
                         : 'bg-white/5 hover:bg-white/10 border border-white/10'

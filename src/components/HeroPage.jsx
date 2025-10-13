@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const HeroPage = () => {
    const quotes = [
@@ -17,21 +18,6 @@ const HeroPage = () => {
       return () => clearInterval(interval);
    }, []);
 
-   const TAB_BUTTONS = [
-      {
-         title: 'Font Generator',
-         path: '/fontgenerator',
-      },
-      {
-         title: 'Emoji Generator',
-         path: '/emojigenerator',
-      },
-      {
-         title: 'Cool Symbol',
-         path: '/symbol',
-      },
-   ];
-
    return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans relative overflow-hidden">
          {/* Background elements */}
@@ -41,18 +27,9 @@ const HeroPage = () => {
          </div>
 
          {/* Glass Style Navbar - Centered */}
-         <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-8 py-4 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-2xl">
-            <div className="flex items-center space-x-8">
-               {TAB_BUTTONS.map((tab) => (
-                  <Link
-                     key={tab.title}
-                     to={tab?.path}
-                     className="hover:text-yellow-400 transition-colors duration-300 text-sm">
-                     {tab.title}
-                  </Link>
-               ))}
-            </div>
-         </nav>
+         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+            <Navbar />
+         </div>
 
          {/* Main Hero Content */}
          <main className="min-h-screen flex flex-col justify-between pt-32 pb-16 relative z-10">
