@@ -23,8 +23,8 @@ function App() {
          />
          <Routes>
             <Route path="/" element={<HeroPage />} />
-            <Route path="/emojiGenerator" element={<EmojiCopy />} />
-            <Route path="/fontGenerator" element={<FancyFontGenerator />} />
+            <Route path="/emojigenerator" element={<EmojiCopy />} />
+            <Route path="/fontgenerator" element={<FancyFontGenerator />} />
             <Route path="/symbol" element={<CoolSymbol />} />
          </Routes>
       </>
