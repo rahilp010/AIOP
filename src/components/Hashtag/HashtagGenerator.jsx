@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Navbar from '../Navbar';
 import { PiSparkleLight } from 'react-icons/pi';
 
@@ -15,7 +15,7 @@ export default function HashtagGenerator() {
       visible: false,
    });
 
-   const GEMINI_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+   const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE';
 
    // Unified notification function
    const showNotification = (message, type = 'success', duration = 3000) => {
