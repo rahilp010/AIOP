@@ -58,30 +58,28 @@ const symbolCategories = [
 ];
 
 const CoolSymbol = () => {
-   const [activeCategory, setActiveCategory] = useState(0);
-   const [toasts, setToasts] = useState([]);
-
-   const addToast = (message, symbol) => {
-      const id = Date.now();
-      const newToast = { id, message, symbol };
-      setToasts(prev => [...prev, newToast]);
-
-      setTimeout(() => {
-         removeToast(id);
-      }, 2000);
-   };
-
-   const removeToast = (id) => {
-      setToasts(prev => prev.filter(toast => toast.id !== id));
-   };
+   const [activeCategory, setActiveCategory] = useState(0);   
+   const [toast, setToast] = useState({
+      message: '',
+      type: 'success', // 'success' | 'error'
+      visible: false,
+   });
 
    const handleCopy = async (symbol) => {
       try {
          await navigator.clipboard.writeText(symbol);
-         addToast('Copied to clipboard!', symbol);
+         showNotification('Copied to clipboard!', 'success');
       } catch (err) {
-         addToast('Failed to copy', '❌');
+         showNotification('Failed to copy', 'error');
       }
+   };
+
+      const showNotification = (message, type = 'success', duration = 3000) => {
+      setToast({ message, type, visible: true });
+      setTimeout(
+         () => setToast((prev) => ({ ...prev, visible: false })),
+         duration
+      );
    };
 
    return (
@@ -90,44 +88,40 @@ const CoolSymbol = () => {
       <div className='z-50 mb-10 -mt-2 flex justify-center '>
           <Navbar/>
       </div>
+
+               {/* Toast notification */}
+         {toast.visible && (
+            <div className={`fixed top-6 right-6 z-50 animate-slideIn`}>
+               <div
+                  className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border 
+            ${
+               toast.type === 'success'
+                  ? 'bg-green-500/20 border-green-400 text-green-100'
+                  : 'bg-red-500/20 border-red-400 text-red-100'
+            } backdrop-blur-md`}>
+                  <svg
+                     className="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     strokeWidth="2">
+                     {toast.type === 'success' ? (
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                     ) : (
+                        <line x1="18" y1="6" x2="6" y2="18" /> && (
+                           <line x1="6" y1="6" x2="18" y2="18" />
+                        )
+                     )}
+                  </svg>
+                  <p className="text-sm">{toast.message}</p>
+               </div>
+            </div>
+         )}
+
+
          {/* Background animation */}
          <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
-         </div>
-
-         {/* Custom Toast Container */}
-         <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 space-y-3 max-w-[calc(100vw-2rem)] sm:max-w-sm w-full pointer-events-none">
-            {toasts.map((toast) => (
-               <div
-                  key={toast.id}
-                  className="toast-slide-up pointer-events-auto">
-                  <div className="relative backdrop-blur-xl bg-gradient-to-r from-emerald-500/90 to-green-600/90 border border-emerald-400/50 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
-                     {/* Progress Bar */}
-                     <div className="absolute bottom-0 left-0 h-1 bg-white/30 w-full">
-                        <div className="h-full bg-white/60 toast-progress"></div>
-                     </div>
-                     
-                     <div className="p-3 sm:p-4 pr-10 sm:pr-12">
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                           <div className="text-white text-xl sm:text-2xl flex-shrink-0">
-                              {toast.symbol}
-                           </div>
-                           <div className="flex-1 min-w-0">
-                              <p className="text-white font-medium text-xs sm:text-sm">
-                                 {toast.message}
-                              </p>
-                           </div>
-                        </div>
-                     </div>
-
-                     <button
-                        onClick={() => removeToast(toast.id)}
-                        className="absolute top-2 sm:top-3 right-2 sm:right-3 text-white/80 hover:text-white transition-colors duration-200">
-                        <X size={16} className="sm:w-[18px] sm:h-[18px]" />
-                     </button>
-                  </div>
-               </div>
-            ))}
          </div>
 
          <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative z-10 animate-fade-in-down">
@@ -198,6 +192,16 @@ const CoolSymbol = () => {
                }
                to {
                   transform: translateY(0);
+                  opacity: 1;
+               }
+            }
+            @keyframes slideIn {
+               from {
+                  transform: translateX(100%);
+                  opacity: 0;
+               }
+               to {
+                  transform: translateX(0);
                   opacity: 1;
                }
             }

@@ -11,6 +11,12 @@ const FancyFontGenerator = () => {
    const [copiedIndex, setCopiedIndex] = useState(null);
    const [favorites, setFavorites] = useState([]);
 
+   const [toast, setToast] = useState({
+      message: '',
+      type: 'success', // 'success' | 'error'
+      visible: false,
+   });
+
    const transformations = [
       { name: 'Bold Sans', icon: '𝗕', mapKey: 'sans_bold' },
       { name: 'Bold Italic', icon: '𝗕', mapKey: 'bold_italic' },
@@ -52,7 +58,7 @@ const FancyFontGenerator = () => {
    const handleCopy = (text, index) => {
       navigator.clipboard.writeText(text);
       setCopiedIndex(index);
-      toast.success('Copied to clipboard!');
+      showNotification('Copied to clipboard!', 'success', 2000);
       setTimeout(() => setCopiedIndex(null), 2000);
    };
 
@@ -85,11 +91,49 @@ const FancyFontGenerator = () => {
       });
    }, [favorites]);
 
+   const showNotification = (message, type = 'success', duration = 3000) => {
+      setToast({ message, type, visible: true });
+      setTimeout(
+         () => setToast((prev) => ({ ...prev, visible: false })),
+         duration
+      );
+   };
+
    return (
       <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-auto customScrollbar">
          <div className="z-50 mb-10 -mt-10 flex justify-center ">
             <Navbar />
          </div>
+
+         {/* Toast notification */}
+         {toast.visible && (
+            <div className={`fixed top-6 right-6 z-50 animate-slideIn`}>
+               <div
+                  className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border 
+            ${
+               toast.type === 'success'
+                  ? 'bg-green-500/20 border-green-400 text-green-100'
+                  : 'bg-red-500/20 border-red-400 text-red-100'
+            } backdrop-blur-md`}>
+                  <svg
+                     className="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     strokeWidth="2">
+                     {toast.type === 'success' ? (
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                     ) : (
+                        <line x1="18" y1="6" x2="6" y2="18" /> && (
+                           <line x1="6" y1="6" x2="18" y2="18" />
+                        )
+                     )}
+                  </svg>
+                  <p className="text-sm">{toast.message}</p>
+               </div>
+            </div>
+         )}
+
          <div className="relative z-10 text-center mb-12">
             <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
                Fancy Font Generator
@@ -157,9 +201,17 @@ const FancyFontGenerator = () => {
                                        </span>
                                     )}
                                  </div>
-                                 <div className={`text-white text-lg break-words ${previewStyle ? 'inline' : ''}`}>
+                                 <div
+                                    className={`text-white text-lg break-words ${
+                                       previewStyle ? 'inline' : ''
+                                    }`}>
                                     {previewStyle ? (
-                                       <span style={previewStyle}>{copyText.replace(/[\u0336\u0331]/g, '')}</span> // Strip combiners for clean CSS preview
+                                       <span style={previewStyle}>
+                                          {copyText.replace(
+                                             /[\u0336\u0331]/g,
+                                             ''
+                                          )}
+                                       </span> // Strip combiners for clean CSS preview
                                     ) : (
                                        copyText
                                     )}
@@ -194,6 +246,17 @@ const FancyFontGenerator = () => {
                }
             )}
          </div>
+
+         {/* Animations */}
+         <style>{`
+            @keyframes slideIn {
+              from { transform: translateX(100%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+            }
+            .animate-slideIn {
+              animation: slideIn 0.3s ease-out;
+            }
+         `}</style>
       </div>
    );
 };

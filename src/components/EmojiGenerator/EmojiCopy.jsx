@@ -13,6 +13,12 @@ const unifiedToEmoji = (unified) =>
 const EmojiCopy = () => {
    const [selectedTab, setSelectedTab] = useState('All');
 
+   const [toast, setToast] = useState({
+      message: '',
+      type: 'success', // 'success' | 'error'
+      visible: false,
+   });
+
    // Group emojis by category
    const groupedEmojis = useMemo(() => {
       const groups = {};
@@ -47,14 +53,18 @@ const EmojiCopy = () => {
    const handleCopy = async (emoji) => {
       try {
          await navigator.clipboard.writeText(emoji);
-         toast.success(`Copied ${emoji} to clipboard!`, {
-            position: 'bottom-center',
-            autoClose: 1000,
-            theme: 'dark',
-         });
+         showNotification(`Copied ${emoji} to clipboard!`, 'success', 2000);
       } catch (err) {
-         toast.error('Failed to copy 😞', { theme: 'dark' });
+         showNotification('Failed to copy 😞', 'error', 2000);
       }
+   };
+
+   const showNotification = (message, type = 'success', duration = 3000) => {
+      setToast({ message, type, visible: true });
+      setTimeout(
+         () => setToast((prev) => ({ ...prev, visible: false })),
+         duration
+      );
    };
 
    return (
@@ -62,12 +72,41 @@ const EmojiCopy = () => {
          <div className="z-50 mb-10 -mt-2 flex justify-center">
             <Navbar />
          </div>
+
+         {/* Toast notification */}
+         {toast.visible && (
+            <div className={`fixed top-6 right-6 z-50 animate-slideIn`}>
+               <div
+                  className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border 
+            ${
+               toast.type === 'success'
+                  ? 'bg-green-500/20 border-green-400 text-green-100'
+                  : 'bg-red-500/20 border-red-400 text-red-100'
+            } backdrop-blur-md`}>
+                  <svg
+                     className="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     strokeWidth="2">
+                     {toast.type === 'success' ? (
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                     ) : (
+                        <line x1="18" y1="6" x2="6" y2="18" /> && (
+                           <line x1="6" y1="6" x2="18" y2="18" />
+                        )
+                     )}
+                  </svg>
+                  <p className="text-sm">{toast.message}</p>
+               </div>
+            </div>
+         )}
+
          {/* Background animation */}
          <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
          </div>
 
-         <ToastContainer />
          <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative z-10 animate-fade-in-down">
             Emoji Browser
          </h1>
@@ -124,6 +163,19 @@ const EmojiCopy = () => {
                   opacity: 1;
                   transform: translateY(0);
                }
+            }
+            @keyframes slideIn {
+               from {
+                  transform: translateX(100%);
+                  opacity: 0;
+               }
+               to {
+                  transform: translateX(0);
+                  opacity: 1;
+               }
+            }
+            .animate-slideIn {
+               animation: slideIn 0.3s ease-out;
             }
             @keyframes fade-in {
                from {
