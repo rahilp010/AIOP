@@ -147,7 +147,7 @@ export default function CoolSymbol() {
    const activeSymbols = symbolCategories[activeCategory];
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-auto h-screen custom-scrollbar">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-auto h-screen customScrollbar">
          {/* Navbar */}
          <div className="z-50 mb-10 -mt-2 flex justify-center">
             <Navbar />
@@ -187,7 +187,7 @@ export default function CoolSymbol() {
          {/* Symbol Grid */}
          <div
             className="max-w-6xl mx-auto p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg 
-                      shadow-2xl shadow-black/20 animate-fade-in overflow-y-auto custom-scrollbar h-[75vh]">
+                      shadow-2xl shadow-black/20 animate-fade-in overflow-y-auto customScrollbar h-[75vh]">
             <h2 className="text-2xl font-semibold mb-6 text-yellow-400">
                {activeSymbols.title}
             </h2>
@@ -238,29 +238,6 @@ export default function CoolSymbol() {
             }
             .animate-slideIn {
                animation: slideIn 0.3s ease-out;
-            }
-
-            /* Custom Scrollbar */
-            .custom-scrollbar::-webkit-scrollbar {
-               width: 8px;
-               height: 8px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-track {
-               background: rgba(255, 255, 255, 0.05);
-               border-radius: 10px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-               background: rgba(251, 191, 36, 0.5);
-               border-radius: 10px;
-               transition: background 0.3s;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-               background: rgba(251, 191, 36, 0.8);
-            }
-            .custom-scrollbar {
-               scrollbar-width: thin;
-               scrollbar-color: rgba(251, 191, 36, 0.5)
-                  rgba(255, 255, 255, 0.05);
             }
          `}</style>
       </div>

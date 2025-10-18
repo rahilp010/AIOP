@@ -7,18 +7,16 @@ export default function HashtagGenerator() {
    const [hashtags, setHashtags] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const [isCopied, setIsCopied] = useState(false);
-
-   // Unified notification state
    const [toast, setToast] = useState({
       message: '',
-      type: 'success', // 'success' | 'error'
+      type: '',
       visible: false,
    });
 
    const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE';
 
-   // Unified notification function
-   const showNotification = (message, type = 'success', duration = 3000) => {
+   /** 🔔 Show notification (success/error) */
+   const showNotification = (message, type = 'success', duration = 2500) => {
       setToast({ message, type, visible: true });
       setTimeout(
          () => setToast((prev) => ({ ...prev, visible: false })),
@@ -26,10 +24,9 @@ export default function HashtagGenerator() {
       );
    };
 
-   // Gemini API integration
-   const generateHashtags = async (description) => {
+   const generateHashtags = async (desc) => {
       try {
-         const response = await fetch(
+         const res = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
             {
                method: 'POST',
@@ -41,7 +38,7 @@ export default function HashtagGenerator() {
                            {
                               text: `You are a social media expert.
 Generate 15 short, relevant, trending hashtags based on the following description:
-"${description}"
+"${desc}"
 Return only hashtags separated by spaces, no explanations.`,
                            },
                         ],
@@ -51,30 +48,22 @@ Return only hashtags separated by spaces, no explanations.`,
             }
          );
 
-         if (!response.ok) throw new Error('Failed to fetch hashtags');
-
-         const data = await response.json();
+         if (!res.ok) throw new Error('Failed to fetch hashtags');
+         const data = await res.json();
          const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+         const tags = text.match(/#[\w]+/g)?.slice(0, 15) || [];
 
-         const tags = text
-            .split(/[\s,]+/)
-            .filter((t) => t.startsWith('#'))
-            .slice(0, 15);
-
-         if (tags.length === 0) throw new Error('No hashtags generated');
-
-         showNotification('Hashtags generated successfully!', 'success');
+         if (!tags.length) throw new Error('No hashtags generated');
+         showNotification('✅ Hashtags generated successfully!');
          return tags;
-      } catch (error) {
-         console.error('Gemini API error:', error);
-         showNotification(
-            error.message || 'Could not generate hashtags',
-            'error'
-         );
+      } catch (err) {
+         console.error('Gemini API error:', err);
+         showNotification(err.message || 'Error generating hashtags', 'error');
          return [];
       }
    };
 
+   /** 🚀 Handle generation */
    const handleSubmit = async () => {
       if (description.length < 10)
          return showNotification('Enter at least 10 characters', 'error');
@@ -89,46 +78,44 @@ Return only hashtags separated by spaces, no explanations.`,
       setIsLoading(false);
    };
 
+   /** 📋 Copy hashtags */
    const handleCopy = () => {
-      if (hashtags.length === 0) return;
+      if (!hashtags.length) return;
       navigator.clipboard.writeText(hashtags.join(' '));
       setIsCopied(true);
-      showNotification(`${hashtags.length} hashtags copied!`, 'success');
+      showNotification(`${hashtags.length} hashtags copied!`);
       setTimeout(() => setIsCopied(false), 2000);
    };
 
-   const handleKeyPress = (e) => {
-      if (e.key === 'Enter' && e.ctrlKey) handleSubmit();
-   };
-
    return (
-      <div className="bg-gradient-to-br from-black via-gray-900 to-black p-6 text-white">
-         <div className="z-50 mb-5 flex justify-center">
+      <div className="bg-gradient-to-br from-black via-gray-900 to-black max-h-screen overflow-auto customScrollbar text-white p-6">
+         {/* Navbar */}
+         <div className="flex justify-center mb-6">
             <Navbar />
          </div>
 
-         {/* Toast notification */}
+         {/* Toast Notification */}
          {toast.visible && (
-            <div className={`fixed top-6 right-6 z-50 animate-slideIn`}>
+            <div className="fixed top-6 right-6 z-50 animate-slideIn">
                <div
-                  className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border 
-            ${
-               toast.type === 'success'
-                  ? 'bg-green-500/20 border-green-400 text-green-100'
-                  : 'bg-red-500/20 border-red-400 text-red-100'
-            } backdrop-blur-md`}>
+                  className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border backdrop-blur-md ${
+                     toast.type === 'error'
+                        ? 'bg-red-500/20 border-red-400 text-red-100'
+                        : 'bg-green-500/20 border-green-400 text-green-100'
+                  }`}>
                   <svg
                      className="w-5 h-5"
                      viewBox="0 0 24 24"
                      fill="none"
                      stroke="currentColor"
                      strokeWidth="2">
-                     {toast.type === 'success' ? (
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                     ) : (
-                        <line x1="18" y1="6" x2="6" y2="18" /> && (
+                     {toast.type === 'error' ? (
+                        <>
+                           <line x1="18" y1="6" x2="6" y2="18" />
                            <line x1="6" y1="6" x2="18" y2="18" />
-                        )
+                        </>
+                     ) : (
+                        <polyline points="20 6 9 17 4 12" />
                      )}
                   </svg>
                   <p className="text-sm">{toast.message}</p>
@@ -136,10 +123,11 @@ Return only hashtags separated by spaces, no explanations.`,
             </div>
          )}
 
-         <div className="max-h-screen flex justify-center items-center overflow-auto customScrollbar pt-48 pb-20">
-            <div className="w-full max-w-3xl bg-white/5 border border-white/10 rounded-3xl p-8 mb-10 shadow-2xl backdrop-blur-xl space-y-8">
+         {/* Main Content */}
+         <div className="flex justify-center items-center overflow-auto">
+            <div className="w-full max-w-3xl bg-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl space-y-8">
                <div className="text-center space-y-3">
-                  <h1 className="text-5xl font-extrabold bg-gradient-to-br from-white/50 via-white to-black bg-clip-text text-transparent">
+                  <h1 className="text-5xl font-extrabold bg-gradient-to-br from-white/60 via-white to-black bg-clip-text text-transparent">
                      InstaHash
                   </h1>
                   <p className="text-gray-300">
@@ -154,7 +142,9 @@ Return only hashtags separated by spaces, no explanations.`,
                   <textarea
                      value={description}
                      onChange={(e) => setDescription(e.target.value)}
-                     onKeyPress={handleKeyPress}
+                     onKeyDown={(e) =>
+                        e.ctrlKey && e.key === 'Enter' && handleSubmit()
+                     }
                      placeholder="e.g. A cozy café morning with latte art ☕🌿..."
                      className="w-full p-4 bg-black/50 border border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
                      rows="4"
@@ -165,12 +155,12 @@ Return only hashtags separated by spaces, no explanations.`,
                   onClick={handleSubmit}
                   disabled={isLoading}
                   className="w-full py-4 rounded-2xl font-semibold text-lg 
-            bg-gradient-to-r from-black/60 to-gray-800/60 
-            border border-white/10 backdrop-blur-md 
-            hover:from-gray-900/70 hover:to-black/70 
-            hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
-            transition-all transform hover:scale-[1.02] active:scale-100 
-            shadow-lg disabled:opacity-60 disabled:cursor-not-allowed">
+              bg-gradient-to-r from-black/60 to-gray-800/60 
+              border border-white/10 backdrop-blur-md 
+              hover:from-gray-900/70 hover:to-black/70 
+              hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
+              transition-all transform hover:scale-[1.02] active:scale-100 
+              shadow-lg disabled:opacity-60 disabled:cursor-not-allowed">
                   {isLoading ? (
                      <div className="flex items-center justify-center gap-2">
                         <svg
@@ -203,7 +193,7 @@ Return only hashtags separated by spaces, no explanations.`,
                </button>
 
                <div className="relative max-h-[350px] overflow-y-auto border border-white/20 bg-white/5 rounded-2xl p-6 backdrop-blur-md">
-                  {hashtags.length > 0 && !isLoading && (
+                  {hashtags.length > 0 && (
                      <button
                         onClick={handleCopy}
                         className="absolute top-4 right-4 p-2 bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition">
@@ -214,7 +204,7 @@ Return only hashtags separated by spaces, no explanations.`,
                               fill="none"
                               stroke="currentColor"
                               strokeWidth="2">
-                              <polyline points="20 6 9 17 4 12"></polyline>
+                              <polyline points="20 6 9 17 4 12" />
                            </svg>
                         ) : (
                            <svg
@@ -229,39 +219,44 @@ Return only hashtags separated by spaces, no explanations.`,
                                  width="13"
                                  height="13"
                                  rx="2"
-                                 ry="2"></rect>
-                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                 ry="2"
+                              />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                            </svg>
                         )}
                      </button>
                   )}
 
                   <div className="flex flex-wrap justify-center gap-3">
-                     {hashtags.length === 0 && !isLoading && (
-                        <p className="text-gray-400 text-sm h-32 flex items-center justify-center gap-3">
-                           <PiSparkleLight size={24} /> No hashtags generated
-                           yet.
+                     {isLoading ? (
+                        [...Array(12)].map((_, i) => (
+                           <div
+                              key={i}
+                              className="w-24 h-7 bg-white/10 rounded-full animate-shimmer"
+                           />
+                        ))
+                     ) : hashtags.length ? (
+                        hashtags.map((tag, i) => (
+                           <span
+                              key={i}
+                              className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 
+                      border border-purple-400/30 rounded-full text-sm font-medium 
+                      hover:scale-105 transition-transform">
+                              {tag}
+                           </span>
+                        ))
+                     ) : (
+                        <p className="text-gray-400 text-sm h-32 flex items-center justify-center gap-2">
+                           <PiSparkleLight size={22} /> No hashtags yet.
                         </p>
                      )}
-                     {isLoading
-                        ? [...Array(12)].map((_, i) => (
-                             <div
-                                key={i}
-                                className="w-24 h-7 bg-white/10 rounded-full animate-shimmer"></div>
-                          ))
-                        : hashtags.map((tag, i) => (
-                             <span
-                                key={i}
-                                className="inline-block px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-full text-sm font-medium hover:scale-105 transition-transform">
-                                {tag}
-                             </span>
-                          ))}
                   </div>
                </div>
             </div>
+         </div>
 
-            {/* Animations */}
-            <style>{`
+         {/* 🔄 Animations */}
+         <style>{`
         @keyframes shimmer {
           0% { background-position: 200% 0; }
           100% { background-position: -200% 0; }
@@ -279,7 +274,6 @@ Return only hashtags separated by spaces, no explanations.`,
           animation: slideIn 0.3s ease-out;
         }
       `}</style>
-         </div>
       </div>
    );
 }
