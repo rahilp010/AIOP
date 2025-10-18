@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Copy, Heart } from 'lucide-react';
-import fontMaps from './text';
 import { toast } from 'react-toastify';
 import Navbar from '../Navbar';
+import fontMaps from './text';
 
 const FancyFontGenerator = () => {
    const [inputText, setInputText] = useState('');
@@ -11,66 +11,66 @@ const FancyFontGenerator = () => {
    const [copiedIndex, setCopiedIndex] = useState(null);
    const [favorites, setFavorites] = useState([]);
 
-   const [toast, setToast] = useState({
-      message: '',
-      type: 'success', // 'success' | 'error'
-      visible: false,
-   });
-
-   const transformations = [
-      { name: 'Bold Sans', icon: '𝗕', mapKey: 'sans_bold' },
-      { name: 'Bold Italic', icon: '𝗕', mapKey: 'bold_italic' },
-      { name: 'Italic Sans', icon: '𝘪', mapKey: 'sans_italic' },
-      { name: 'Gothic Fraktur', icon: '𝔊', mapKey: 'fraktur' },
-      { name: 'Bubble Circled', icon: 'ⓑ', mapKey: 'circled' },
-      { name: 'Small Caps', icon: 'ꜱ', mapKey: 'smallcaps' },
-      { name: 'Cursive Script', icon: '𝓒', mapKey: 'bold_script' },
-      { name: 'Double Struck', icon: '𝕯', mapKey: 'double_struck' },
-      { name: 'Monospace', icon: '𝙼', mapKey: 'monospace' },
-      { name: 'Sans Serif', icon: '𝖲', mapKey: 'sans' },
-      { name: 'Fancy Fraktur', icon: '𝔊', mapKey: 'fraktur' },
-      {
-         name: 'Strikethrough',
-         icon: 'S̶',
-         transform: (text) => {
-            if (!text) return '';
-            return text
-               .split('')
-               .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0336'))
-               .join('');
+   const transformations = useMemo(
+      () => [
+         { name: 'Bold Sans', icon: '𝗕', mapKey: 'sans_bold' },
+         { name: 'Bold Italic', icon: '𝗕', mapKey: 'bold_italic' },
+         { name: 'Italic Sans', icon: '𝘪', mapKey: 'sans_italic' },
+         { name: 'Gothic Fraktur', icon: '𝔊', mapKey: 'fraktur' },
+         { name: 'Bubble Circled', icon: 'ⓑ', mapKey: 'circled' },
+         { name: 'Small Caps', icon: 'ꜱ', mapKey: 'smallcaps' },
+         { name: 'Cursive Script', icon: '𝓒', mapKey: 'bold_script' },
+         { name: 'Double Struck', icon: '𝕯', mapKey: 'double_struck' },
+         { name: 'Monospace', icon: '𝙼', mapKey: 'monospace' },
+         { name: 'Sans Serif', icon: '𝖲', mapKey: 'sans' },
+         { name: 'Fancy Fraktur', icon: '𝔊', mapKey: 'fraktur' },
+         {
+            name: 'Strikethrough',
+            icon: 'S̶',
+            transform: (text) =>
+               text
+                  ?.split('')
+                  .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0336'))
+                  .join(''),
+            previewStyle: { textDecoration: 'line-through' },
          },
-         previewStyle: { textDecoration: 'line-through' },
-      },
-      {
-         name: 'Underline',
-         icon: 'U̲',
-         transform: (text) => {
-            if (!text) return '';
-            return text
-               .split('')
-               .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0331'))
-               .join('');
+         {
+            name: 'Underline',
+            icon: 'U̲',
+            transform: (text) =>
+               text
+                  ?.split('')
+                  .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0331'))
+                  .join(''),
+            previewStyle: { textDecoration: 'underline' },
          },
-         previewStyle: { textDecoration: 'underline' },
-      },
-   ];
+      ],
+      []
+   );
 
-   const handleCopy = (text, index) => {
+   /** 🔹 Copy Handler */
+   const handleCopy = useCallback((text, index) => {
       navigator.clipboard.writeText(text);
       setCopiedIndex(index);
-      showNotification('Copied to clipboard!', 'success', 2000);
+      toast.success('Copied to clipboard!', { autoClose: 1500 });
       setTimeout(() => setCopiedIndex(null), 2000);
-   };
+   }, []);
 
-   const handleFavorite = (name) => {
+   /** 🔹 Favorite Handler */
+   const handleFavorite = useCallback((name) => {
       setFavorites((prev) =>
          prev.includes(name) ? prev.filter((f) => f !== name) : [...prev, name]
       );
-   };
+   }, []);
 
-   const applyEmojis = (text) => (includeEmojis ? `${text} ✨🌈🔥` : text);
+   /** 🔹 Emoji Add Helper */
+   const applyEmojis = useCallback(
+      (text) => (includeEmojis ? `${text} ✨🌈🔥` : text),
+      [includeEmojis]
+   );
 
-   const getTransform = (item, text) => {
+   /** 🔹 Transform Generator */
+   const getTransform = useCallback((item, text) => {
       if (item.transform) return item.transform(text);
       if (item.mapKey && fontMaps[item.mapKey]) {
          return text
@@ -79,62 +79,26 @@ const FancyFontGenerator = () => {
             .join('');
       }
       return text;
-   };
+   }, []);
 
-   // Sort so favorites come first
+   /** 🔹 Sort favorites first */
    const sortedTransformations = useMemo(() => {
       return [...transformations].sort((a, b) => {
          const aFav = favorites.includes(a.name);
          const bFav = favorites.includes(b.name);
-         if (aFav === bFav) return 0;
-         return aFav ? -1 : 1;
+         return aFav === bFav ? 0 : aFav ? -1 : 1;
       });
-   }, [favorites]);
-
-   const showNotification = (message, type = 'success', duration = 3000) => {
-      setToast({ message, type, visible: true });
-      setTimeout(
-         () => setToast((prev) => ({ ...prev, visible: false })),
-         duration
-      );
-   };
+   }, [favorites, transformations]);
 
    return (
-      <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-auto customScrollbar">
-         <div className="z-50 mb-10 -mt-10 flex justify-center ">
+      <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-auto customScrollbar">
+         {/* Navbar */}
+         <div className="z-50 mb-10 -mt-10 flex justify-center">
             <Navbar />
          </div>
 
-         {/* Toast notification */}
-         {toast.visible && (
-            <div className={`fixed top-6 right-6 z-50 animate-slideIn`}>
-               <div
-                  className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border 
-            ${
-               toast.type === 'success'
-                  ? 'bg-green-500/20 border-green-400 text-green-100'
-                  : 'bg-red-500/20 border-red-400 text-red-100'
-            } backdrop-blur-md`}>
-                  <svg
-                     className="w-5 h-5"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     strokeWidth="2">
-                     {toast.type === 'success' ? (
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                     ) : (
-                        <line x1="18" y1="6" x2="6" y2="18" /> && (
-                           <line x1="6" y1="6" x2="18" y2="18" />
-                        )
-                     )}
-                  </svg>
-                  <p className="text-sm">{toast.message}</p>
-               </div>
-            </div>
-         )}
-
-         <div className="relative z-10 text-center mb-12">
+         {/* Header */}
+         <div className="text-center mb-12">
             <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
                Fancy Font Generator
             </h1>
@@ -143,7 +107,8 @@ const FancyFontGenerator = () => {
             </p>
          </div>
 
-         <div className="relative z-10 w-full max-w-3xl bg-white/5 border border-white/10 rounded-3xl p-8 mb-10 shadow-2xl backdrop-blur-xl">
+         {/* Input Box */}
+         <div className="w-full max-w-3xl bg-white/5 border border-white/10 rounded-3xl p-8 mb-10 shadow-2xl backdrop-blur-xl">
             <textarea
                value={inputText}
                onChange={(e) => setInputText(e.target.value)}
@@ -164,21 +129,19 @@ const FancyFontGenerator = () => {
                {inputText && (
                   <button
                      onClick={() => setInputText('')}
-                     className="text-white font-bold cursor-pointer bg-red-500 hover:text-white text-sm px-4 py-2 rounded-lg hover:bg-white/10 transition">
+                     className="text-white font-bold bg-red-500 hover:text-white text-sm px-4 py-2 rounded-lg hover:bg-white/10 transition">
                      Clear
                   </button>
                )}
             </div>
          </div>
 
-         <div className="relative z-10 w-full max-w-3xl grid grid-cols-1 gap-4">
+         {/* Transformations */}
+         <div className="w-full max-w-3xl grid grid-cols-1 gap-4">
             {sortedTransformations.map(
                ({ name, icon, mapKey, transform, previewStyle }, index) => {
                   const copyText = applyEmojis(
-                     getTransform(
-                        { name, icon, mapKey, transform },
-                        inputText || name
-                     )
+                     getTransform({ mapKey, transform }, inputText || name)
                   );
                   const isCopied = copiedIndex === index;
                   const isFav = favorites.includes(name);
@@ -186,8 +149,9 @@ const FancyFontGenerator = () => {
                   return (
                      <div
                         key={name}
-                        className="group relative bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-md hover:shadow-lg overflow-hidden">
+                        className="group bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-md hover:shadow-lg">
                         <div className="flex justify-between items-center gap-5">
+                           {/* Font preview */}
                            <div className="flex items-center gap-4 flex-1 min-w-0">
                               <div className="text-3xl text-gray-400 shrink-0">
                                  {icon}
@@ -196,22 +160,19 @@ const FancyFontGenerator = () => {
                                  <div className="text-xs flex gap-3 items-center text-gray-500 mb-1 font-medium uppercase tracking-wider">
                                     <span>{name}</span>
                                     {index < 3 && (
-                                       <span className="rounded-4xl px-4 py-1 text-center  bg-red-500/10 backdrop-blur-md border border-red-500/20 text-red-500 text-xs font-semibold shadow-md">
+                                       <span className="rounded-4xl px-4 py-1 bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-semibold shadow-md">
                                           TRENDING
                                        </span>
                                     )}
                                  </div>
-                                 <div
-                                    className={`text-white text-lg break-words ${
-                                       previewStyle ? 'inline' : ''
-                                    }`}>
+                                 <div className="text-white text-lg break-words">
                                     {previewStyle ? (
                                        <span style={previewStyle}>
                                           {copyText.replace(
                                              /[\u0336\u0331]/g,
                                              ''
                                           )}
-                                       </span> // Strip combiners for clean CSS preview
+                                       </span>
                                     ) : (
                                        copyText
                                     )}
@@ -219,6 +180,7 @@ const FancyFontGenerator = () => {
                               </div>
                            </div>
 
+                           {/* Favorite Button */}
                            <Heart
                               size={22}
                               className={`cursor-pointer transition-all duration-200 hover:scale-125 ${
@@ -230,9 +192,10 @@ const FancyFontGenerator = () => {
                               fill={isFav ? 'currentColor' : 'none'}
                            />
 
+                           {/* Copy Button */}
                            <button
                               onClick={() => handleCopy(copyText, index)}
-                              className={`shrink-0 px-5 py-2.5 rounded-xl flex items-center gap-2 font-medium transition-all duration-200 shadow ${
+                              className={`px-5 py-2.5 rounded-xl flex items-center gap-2 font-medium transition-all duration-200 shadow ${
                                  isCopied
                                     ? 'bg-gray-700 text-white'
                                     : 'bg-white text-black hover:bg-gray-200'
@@ -246,17 +209,6 @@ const FancyFontGenerator = () => {
                }
             )}
          </div>
-
-         {/* Animations */}
-         <style>{`
-            @keyframes slideIn {
-              from { transform: translateX(100%); opacity: 0; }
-              to { transform: translateX(0); opacity: 1; }
-            }
-            .animate-slideIn {
-              animation: slideIn 0.3s ease-out;
-            }
-         `}</style>
       </div>
    );
 };
