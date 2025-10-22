@@ -98,7 +98,7 @@ Return only hashtags separated by spaces, no explanations.`,
    };
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
+      <div className="min-h-[100vh] bg-gradient-to-br from-black via-gray-900 to-black text-white">
          {/* Toast Notification - Responsive positioning */}
          {toast.visible && (
             <div className="fixed top-4 right-4 left-4 sm:left-auto sm:top-6 sm:right-6 animate-slideIn">

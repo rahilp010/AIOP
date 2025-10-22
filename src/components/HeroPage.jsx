@@ -55,7 +55,7 @@ const HeroPage = () => {
 
          {/* Hero content */}
          <main
-            className={`min-h-screen flex flex-col justify-between pt-32 pb-16 relative z-10 transition-transform duration-500 ease-out ${
+            className={`min-h-[100vh] flex flex-col justify-between pt-32 pb-16 relative z-10 transition-transform duration-500 ease-out ${
                sidebarOpen && isMobile ? 'translate-x-72 sm:translate-x-80' : ''
             }`}>
             <div className="max-w-7xl mx-auto px-6 flex-grow flex flex-col justify-center">
