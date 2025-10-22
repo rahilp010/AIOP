@@ -28,7 +28,7 @@ const HeroPage = () => {
    }, []);
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans relative overflow-hidden">
+      <div className="min-h-[100vh] bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans relative overflow-hidden">
          {/* Hamburger Button - Always visible */}
          <button
             onClick={() => setSidebarOpen((prev) => !prev)}

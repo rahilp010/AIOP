@@ -129,7 +129,7 @@ Return only hashtags separated by spaces, no explanations.`,
          )}
 
          {/* Main Content - Responsive padding and layout */}
-         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-6 max-h-screen overflow-auto customScrollbar">
+         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-6 max-h-[100vh] overflow-auto customScrollbar">
             <button
                onClick={() => setSidebarOpen((prev) => !prev)}
                className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
@@ -148,7 +148,7 @@ Return only hashtags separated by spaces, no explanations.`,
             />
             <div className="max-w-4xl mx-auto">
                {/* Card Container - Responsive padding */}
-               <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl backdrop-blur-xl space-y-6 sm:space-y-8 mt-10">
+               <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl backdrop-blur-xl space-y-6 sm:space-y-8 mt-16 ">
                   {/* Header - Responsive text sizes */}
                   <div className="text-center space-y-2 sm:space-y-3">
                      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-br from-white/60 via-white to-black bg-clip-text text-transparent">

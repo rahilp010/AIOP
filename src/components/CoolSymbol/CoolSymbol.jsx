@@ -653,7 +653,7 @@ export default function CoolSymbol() {
    const activeSymbols = symbolCategories[activeCategory];
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-16 md:px-10 relative overflow-auto h-screen customScrollbar">
+      <div className="min-h-[100vh] bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-20 md:px-10 relative overflow-auto h-screen customScrollbar">
          <button
             onClick={() => setSidebarOpen((prev) => !prev)}
             className="fixed top-6 left-6 z-50 p-3 rounded-2xl 

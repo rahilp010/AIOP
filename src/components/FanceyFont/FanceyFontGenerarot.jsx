@@ -105,7 +105,7 @@ const FancyFontGenerator = () => {
    const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
    return (
-      <div className="relative min-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-auto customScrollbar">
+      <div className="relative max-h-[100vh] flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-auto customScrollbar">
          {/* 🔹 Always visible hamburger button */}
          <button
             onClick={toggleSidebar}
