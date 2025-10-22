@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home } from 'lucide-react';
+import { ArrowRight, Home } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
 const Navbar = () => {
@@ -49,7 +49,7 @@ const Navbar = () => {
 
          <div className="flex items-center flex-1 justify-center">
             {/* Desktop Navigation Tabs */}
-            <div className="hidden md:flex items-center">
+            <div className="hidden md:flex items-center w-96">
                {TAB_BUTTONS.map((tab) => {
                   const isActive = location.pathname === tab.path;
                   return (
@@ -72,15 +72,20 @@ const Navbar = () => {
             <div className="md:hidden relative">
                <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 ease-out hover:scale-105 shadow-md"
-               >
+                  className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 ease-out hover:scale-105 shadow-md">
                   <svg
-                     className={`w-6 h-6 transition-transform duration-300 ${mobileMenuOpen ? 'rotate-90' : ''}`}
+                     className={`w-6 h-6 transition-transform duration-300 ${
+                        mobileMenuOpen ? 'rotate-90' : ''
+                     }`}
                      fill="none"
                      stroke="currentColor"
-                     viewBox="0 0 24 24"
-                  >
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                     viewBox="0 0 24 24">
+                     <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                     />
                   </svg>
                </button>
 
@@ -88,9 +93,8 @@ const Navbar = () => {
                {mobileMenuOpen && (
                   <div
                      ref={menuRef}
-                     className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg shadow-xl max-h-80 overflow-y-auto customScrollbar z-50"
-                  >
-                     <div className="py-2 divide-y divide-white/10">
+                     className="fixed top-44 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-2 w-96 bg-gradient-to-br from-black via-gray-900 to-black text-white rounded-2xl backdrop-blur-lg shadow-xl max-h-96 overflow-hidden customScrollbar z-50">
+                     <div className="py-2 divide-y divide-white/10 overflow-hidden">
                         {TAB_BUTTONS.map((tab) => {
                            const isActive = location.pathname === tab.path;
                            return (
@@ -98,13 +102,15 @@ const Navbar = () => {
                                  key={tab.title}
                                  to={tab.path}
                                  onClick={() => setMobileMenuOpen(false)}
-                                 className={`block w-full text-left px-6 py-3 font-medium transition-all duration-200 ease-out hover:bg-white/10 rounded-xl mx-1 ${
+                                 className={`block w-full text-left px-6 py-3 font-medium transition-all duration-200 ease-out hover:bg-white/10 rounded-xl mx-1 flex justify-between items-baseline ${
                                     isActive
                                        ? 'bg-gradient-to-r from-yellow-500/20 to-amber-600/20 text-yellow-200'
                                        : 'text-white/80'
-                                 }`}
-                              >
+                                 }`}>
                                  {tab.title}
+                                 <span className="ml-2 text-xs text-gray-400">
+                                    <ArrowRight />
+                                 </span>
                               </Link>
                            );
                         })}
