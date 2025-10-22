@@ -1,125 +1,178 @@
+import React, { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowRight, Home } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { CiMenuFries } from "react-icons/ci";
+import { Home, Menu, X, Hash, Type, Smile, Sparkles } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
    const location = useLocation();
-   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-   const menuRef = useRef(null);
+   const sidebarRef = useRef(null);
 
-   const TAB_BUTTONS = [
-      { title: 'Font Generator', path: '/fontgenerator' },
-      { title: 'Emoji Generator', path: '/emojigenerator' },
-      { title: 'Cool Symbol', path: '/symbol' },
-      { title: 'Hashtag', path: '/hashtaggenerator' },
+   const NAV_ITEMS = [
+      {
+         title: 'Home',
+         path: '/',
+         icon: Home,
+         gradient: 'from-blue-500/20 to-cyan-500/20',
+         borderColor: 'border-blue-400/30',
+      },
+      {
+         title: 'Font Generator',
+         path: '/fontgenerator',
+         icon: Type,
+         gradient: 'from-purple-500/20 to-pink-500/20',
+         borderColor: 'border-purple-400/30',
+      },
+      {
+         title: 'Emoji Generator',
+         path: '/emojigenerator',
+         icon: Smile,
+         gradient: 'from-yellow-500/20 to-orange-500/20',
+         borderColor: 'border-yellow-400/30',
+      },
+      {
+         title: 'Cool Symbol',
+         path: '/symbol',
+         icon: Sparkles,
+         gradient: 'from-green-500/20 to-emerald-500/20',
+         borderColor: 'border-green-400/30',
+      },
+      {
+         title: 'Hashtag',
+         path: '/hashtaggenerator',
+         icon: Hash,
+         gradient: 'from-red-500/20 to-rose-500/20',
+         borderColor: 'border-red-400/30',
+      },
    ];
 
-   const showHome = location.pathname !== '/';
-
-   // Close mobile menu on outside click
    useEffect(() => {
-      const handleClickOutside = (event) => {
-         if (menuRef.current && !menuRef.current.contains(event.target)) {
-            setMobileMenuOpen(false);
+      const handleClickOutside = (e) => {
+         if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+            setSidebarOpen(false);
          }
       };
-
-      if (mobileMenuOpen) {
+      if (sidebarOpen)
          document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
+      return () =>
          document.removeEventListener('mousedown', handleClickOutside);
-      };
-   }, [mobileMenuOpen]);
+   }, [sidebarOpen]);
+
+   useEffect(() => {
+      if (isMobile) setSidebarOpen(false);
+   }, [location.pathname]);
 
    return (
-      <nav className="flex items-center gap-2 px-4 py-2 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-2xl relative">
-         {showHome && (
-            <>
-               <Link
-                  to="/"
-                  className="flex items-center justify-center text-white hover:text-yellow-400 transition-all duration-300 bg-white/5 hover:bg-white/10 p-3 rounded-xl"
-                  title="Home">
-                  <Home size={20} />
-               </Link>
-               <div className="h-6 w-px bg-white/20" />
-            </>
+      <>
+         {/* Overlay always works when sidebar open */}
+         {sidebarOpen && (
+            <div
+               className="fixed inset-0 z-40 transition-all duration-300 ease-out opacity-100 bg-black/60 backdrop-blur-sm"
+               onClick={() => setSidebarOpen(false)}
+            />
          )}
 
-         <div className="flex items-center flex-1 justify-center">
-            {/* Desktop Navigation Tabs */}
-            <div className="hidden md:flex items-center w-96">
-               {TAB_BUTTONS.map((tab) => {
-                  const isActive = location.pathname === tab.path;
-                  return (
-                     <Link
-                        key={tab.title}
-                        to={tab.path}
-                        className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 
-                           ${
-                              isActive
-                                 ? 'text-yellow-400 bg-white/10 border border-yellow-400/20'
-                                 : 'text-white/80 hover:text-yellow-400 hover:bg-white/10'
-                           }`}>
-                        {tab.title}
-                     </Link>
-                  );
-               })}
+         <aside
+            ref={sidebarRef}
+            className={`fixed top-0 left-0 h-full z-50 w-72 sm:w-80
+               bg-gradient-to-br from-white/10 via-white/5 to-transparent
+               backdrop-blur-2xl border-r border-white/20 shadow-2xl shadow-black/30
+               transition-transform duration-500 ease-out
+               ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
+            {/* Sidebar content same as before */}
+            {/* Animated gradient background */}
+            <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
+               <div className="absolute -top-20 -left-20 w-60 h-60 bg-purple-500 rounded-full blur-3xl animate-pulse" />
+               <div className="absolute top-1/2 -left-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse delay-1000" />
+               <div className="absolute bottom-20 left-10 w-50 h-50 bg-pink-500 rounded-full blur-3xl animate-pulse delay-2000" />
             </div>
 
-            {/* Mobile hamburger button */}
-            <div className="md:hidden relative">
-               <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 ease-out hover:scale-105 shadow-md">
-                  <svg
-                     className={`w-6 h-6 transition-transform duration-300 ${
-                        mobileMenuOpen ? 'rotate-90' : ''
-                     }`}
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24">
-                     <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 6h16M4 12h16M4 18h16"
-                     />
-                  </svg>
-               </button>
-
-               {/* Mobile menu dropdown */}
-               {mobileMenuOpen && (
-                  <div
-                     ref={menuRef}
-                     className="fixed top-44 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-2 w-96 bg-gradient-to-br from-black via-gray-900 to-black text-white rounded-2xl backdrop-blur-lg shadow-xl max-h-96 overflow-hidden customScrollbar z-50">
-                     <div className="py-2 divide-y divide-white/10 overflow-hidden">
-                        {TAB_BUTTONS.map((tab) => {
-                           const isActive = location.pathname === tab.path;
-                           return (
-                              <Link
-                                 key={tab.title}
-                                 to={tab.path}
-                                 onClick={() => setMobileMenuOpen(false)}
-                                 className={`block w-full text-left px-6 py-3 font-medium transition-all duration-200 ease-out hover:bg-white/10 rounded-xl mx-1 flex justify-between items-baseline ${
-                                    isActive
-                                       ? 'bg-gradient-to-r from-yellow-500/20 to-amber-600/20 text-yellow-200'
-                                       : 'text-white/80'
-                                 }`}>
-                                 {tab.title}
-                                 <span className="ml-2 text-xs text-gray-400">
-                                    <ArrowRight />
-                                 </span>
-                              </Link>
-                           );
-                        })}
+            {/* Sidebar Content */}
+            <div className="relative h-full flex flex-col p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 customScrollbar">
+               {/* Logo/Brand */}
+               <div className="mb-8 mt-4">
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
+                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                        <Sparkles size={20} className="text-white" />
+                     </div>
+                     <div>
+                        <h1 className="text-xl font-bold text-white">
+                           TextCraft
+                        </h1>
+                        <p className="text-xs text-gray-400">Creative Tools</p>
                      </div>
                   </div>
-               )}
+               </div>
+
+               {/* Navigation Links */}
+               <nav className="flex-1 space-y-2">
+                  {NAV_ITEMS.map((item) => {
+                     const isActive = location.pathname === item.path;
+                     const Icon = item.icon;
+
+                     return (
+                        <Link
+                           key={item.path}
+                           to={item.path}
+                           className={`
+                              group relative flex items-center gap-4 px-4 py-4
+                              rounded-2xl font-medium text-sm
+                              transition-all duration-300 ease-out
+                              overflow-hidden
+                              ${
+                                 isActive
+                                    ? `bg-gradient-to-r ${item.gradient} border ${item.borderColor} text-white shadow-lg scale-105`
+                                    : 'text-white/70 hover:text-white hover:bg-white/10 hover:scale-105 border border-transparent'
+                              }
+                           `}>
+                           {/* Animated background on hover */}
+                           <div
+                              className={`
+                              absolute inset-0 bg-gradient-to-r ${item.gradient}
+                              opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                              ${isActive ? 'opacity-100' : ''}
+                           `}
+                           />
+
+                           {/* Icon */}
+                           <div
+                              className={`
+                              relative z-10 w-10 h-10 rounded-xl 
+                              flex items-center justify-center
+                              transition-all duration-300
+                              ${
+                                 isActive
+                                    ? 'bg-white/20 shadow-lg'
+                                    : 'bg-white/5 group-hover:bg-white/15'
+                              }
+                           `}>
+                              <Icon size={20} />
+                           </div>
+
+                           {/* Text */}
+                           <span className="relative z-10 flex-1">
+                              {item.title}
+                           </span>
+
+                           {/* Active indicator */}
+                           {isActive && (
+                              <div className="relative z-10 w-2 h-2 rounded-full bg-white animate-pulse" />
+                           )}
+                        </Link>
+                     );
+                  })}
+               </nav>
+
+               {/* Footer */}
+               <div className="mt-8 pt-6 border-t border-white/10">
+                  <div className="px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
+                     <p className="text-xs text-gray-400 mb-1">Made with ❤️</p>
+                     <p className="text-xs text-white/70">Version 1.0.0</p>
+                  </div>
+               </div>
             </div>
-         </div>
-      </nav>
+         </aside>
+      </>
    );
 };
 

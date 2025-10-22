@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useMemo, useCallback } from 'react';
-import { Copy, Heart } from 'lucide-react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { Copy, Heart, Menu, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Navbar from '../Navbar';
 import fontMaps from './text';
@@ -90,15 +90,46 @@ const FancyFontGenerator = () => {
       });
    }, [favorites, transformations]);
 
+   /** 🔹 Sidebar logic */
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+   const [isMobile, setIsMobile] = useState(false);
+
+   useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+   }, []);
+
+   /** Toggle sidebar manually */
+   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+
    return (
-      <div className="max-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-auto customScrollbar">
+      <div className="relative min-h-screen flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-auto customScrollbar">
+         {/* 🔹 Always visible hamburger button */}
+         <button
+            onClick={toggleSidebar}
+            className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
+                     bg-white/10 backdrop-blur-xl border border-white/20
+                     hover:bg-white/20 hover:scale-105
+                     active:scale-95 transition-all duration-300 
+                     shadow-lg shadow-black/20">
+            {sidebarOpen ? (
+               <X size={24} className="text-white" />
+            ) : (
+               <Menu size={24} className="text-white" />
+            )}
+         </button>
+
          {/* Navbar */}
-         <div className="z-50 mb-10 -mt-10 flex justify-center">
-            <Navbar />
-         </div>
+         <Navbar
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+            isMobile={isMobile}
+         />
 
          {/* Header */}
-         <div className="text-center mb-12">
+         <div className="text-center mb-12 mt-10">
             <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
                Fancy Font Generator
             </h1>

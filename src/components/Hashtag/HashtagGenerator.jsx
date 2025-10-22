@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PiSparkleLight } from 'react-icons/pi';
 import Navbar from '../Navbar';
+import { CiMenuFries } from 'react-icons/ci';
 
 export default function HashtagGenerator() {
    const [description, setDescription] = useState('');
@@ -12,6 +13,15 @@ export default function HashtagGenerator() {
       type: '',
       visible: false,
    });
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+   const [isMobile, setIsMobile] = useState(false);
+
+   useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+   }, []);
 
    const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE';
 
@@ -91,7 +101,7 @@ Return only hashtags separated by spaces, no explanations.`,
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
          {/* Toast Notification - Responsive positioning */}
          {toast.visible && (
-            <div className="fixed top-4 right-4 left-4 sm:left-auto sm:top-6 sm:right-6 z-50 animate-slideIn">
+            <div className="fixed top-4 right-4 left-4 sm:left-auto sm:top-6 sm:right-6 animate-slideIn">
                <div
                   className={`px-4 py-3 sm:px-6 rounded-xl shadow-lg flex items-center gap-2 border backdrop-blur-md ${
                      toast.type === 'error'
@@ -120,13 +130,25 @@ Return only hashtags separated by spaces, no explanations.`,
 
          {/* Main Content - Responsive padding and layout */}
          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-6 max-h-screen overflow-auto customScrollbar">
-            {/* Navbar */}
-            <div className="flex justify-center mb-10">
-               <Navbar />
-            </div>
+            <button
+               onClick={() => setSidebarOpen((prev) => !prev)}
+               className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
+                              bg-white/10 backdrop-blur-xl border border-white/20
+                              hover:bg-white/20 hover:scale-105
+                              active:scale-95
+                              transition-all duration-300 
+                              shadow-lg shadow-black/20">
+               <CiMenuFries size={24} className="text-white" />
+            </button>
+
+            <Navbar
+               sidebarOpen={sidebarOpen}
+               setSidebarOpen={setSidebarOpen}
+               isMobile={isMobile}
+            />
             <div className="max-w-4xl mx-auto">
                {/* Card Container - Responsive padding */}
-               <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl backdrop-blur-xl space-y-6 sm:space-y-8">
+               <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl backdrop-blur-xl space-y-6 sm:space-y-8 mt-10">
                   {/* Header - Responsive text sizes */}
                   <div className="text-center space-y-2 sm:space-y-3">
                      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-br from-white/60 via-white to-black bg-clip-text text-transparent">

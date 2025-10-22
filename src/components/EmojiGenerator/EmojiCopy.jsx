@@ -1,6 +1,7 @@
-import React, { useMemo, useState, memo, useCallback } from 'react';
+import React, { useMemo, useState, memo, useCallback, useEffect } from 'react';
 import emojis from 'emoji-datasource';
 import Navbar from '../Navbar';
+import { CiMenuFries } from 'react-icons/ci';
 
 // Utility: Convert unified code to emoji char
 const unifiedToEmoji = (unified) =>
@@ -76,17 +77,28 @@ export default function EmojiCopy() {
       type: 'success',
       visible: false,
    });
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+   const [isMobile, setIsMobile] = useState(false);
+
+   useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+   }, []);
 
    // Preprocess emojis once
    const processedEmojis = useMemo(
       () =>
-         emojis
-            .filter((e) => e.unified && e.short_name)
-            .map((e) => ({
+         emojis.reduce((acc, e) => {
+            if (!e.unified || !e.short_name) return acc;
+            acc.push({
                char: unifiedToEmoji(e.unified),
                name: e.short_name,
                category: e.category || 'Others',
-            })),
+            });
+            return acc;
+         }, []),
       []
    );
 
@@ -137,10 +149,23 @@ export default function EmojiCopy() {
    );
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-8 md:px-10 relative overflow-auto h-screen customScrollbar">
-         <div className="z-50 mb-10 -mt-2 flex justify-center">
-            <Navbar />
-         </div>
+      <div className="max-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-16 md:px-10 relative overflow-auto h-screen customScrollbar indexwise">
+         <button
+            onClick={() => setSidebarOpen((prev) => !prev)}
+            className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
+                              bg-white/10 backdrop-blur-xl border border-white/20
+                              hover:bg-white/20 hover:scale-105
+                              active:scale-95
+                              transition-all duration-300 
+                              shadow-lg shadow-black/20">
+            <CiMenuFries size={24} className="text-white" />
+         </button>
+
+         <Navbar
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+            isMobile={isMobile}
+         />
 
          <Toast toast={toast} />
 
@@ -148,11 +173,11 @@ export default function EmojiCopy() {
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
          </div>
 
-         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative z-10 animate-fade-in-down">
+         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative animate-fade-in-down">
             Emoji Browser
          </h1>
 
-         <div className="flex flex-wrap justify-center gap-3 mb-8 relative z-10">
+         <div className="flex flex-wrap justify-center gap-3 mb-8 relative">
             {categories.map((cat) => (
                <button
                   key={cat}
@@ -163,14 +188,14 @@ export default function EmojiCopy() {
                     ? 'bg-gradient-to-r from-yellow-500 to-amber-600 text-black'
                     : 'bg-white/5 hover:bg-white/10 border border-white/10'
               }`}>
-                  <span className="relative z-10">{cat}</span>
+                  <span className="relative">{cat}</span>
                </button>
             ))}
          </div>
 
          <div
             key={selectedTab}
-            className="max-w-6xl mx-auto h-[75vh] mb-10 overflow-y-auto p-6 
+            className="max-w-6xl mx-auto h-[100vh] overflow-y-auto p-6 
                    bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg 
                    shadow-2xl shadow-black/20 transition-all duration-500 ease-in-out animate-fade-in customScrollbar">
             <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-4">
