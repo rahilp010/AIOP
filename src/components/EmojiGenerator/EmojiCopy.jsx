@@ -149,7 +149,7 @@ export default function EmojiCopy() {
    );
 
    return (
-      <div className="min-h-[100vh] bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-20 md:px-10 relative overflow-auto h-[100vh] customScrollbar indexwise">
+      <div className="min-h-[100dvh] bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-20 md:px-10 relative overflow-y-auto h-[100dvh] customScrollbar indexwise">
          <button
             onClick={() => setSidebarOpen((prev) => !prev)}
             className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
@@ -197,7 +197,7 @@ export default function EmojiCopy() {
             key={selectedTab}
             className="max-w-6xl mx-auto p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg 
                       shadow-2xl shadow-black/20 animate-fade-in overflow-y-auto customScrollbar h-[75vh]">
-            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
+            <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
                {displayedEmojis.map((emoji, i) => (
                   <EmojiButton key={i} emoji={emoji} onCopy={handleCopy} />
                ))}

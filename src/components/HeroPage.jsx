@@ -28,7 +28,7 @@ const HeroPage = () => {
    }, []);
 
    return (
-      <div className="min-h-[100vh] bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans relative overflow-hidden">
+      <div className="min-h-[100dvh] bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans relative overflow-y-auto">
          {/* Hamburger Button - Always visible */}
          <button
             onClick={() => setSidebarOpen((prev) => !prev)}
@@ -55,7 +55,7 @@ const HeroPage = () => {
 
          {/* Hero content */}
          <main
-            className={`min-h-[100vh] flex flex-col justify-between pt-32 pb-16 relative z-10 transition-transform duration-500 ease-out ${
+            className={`min-h-[100dvh] flex flex-col justify-between pt-32 pb-16 relative z-10 transition-transform duration-500 ease-out ${
                sidebarOpen && isMobile ? 'translate-x-72 sm:translate-x-80' : ''
             }`}>
             <div className="max-w-7xl mx-auto px-6 flex-grow flex flex-col justify-center">

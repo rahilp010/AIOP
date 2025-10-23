@@ -97,7 +97,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
                      </div>
                      <div>
                         <h1 className="text-xl font-bold text-white">
-                           TextCraft
+                           All In One Place
                         </h1>
                         <p className="text-xs text-gray-400">Creative Tools</p>
                      </div>

@@ -98,10 +98,10 @@ Return only hashtags separated by spaces, no explanations.`,
    };
 
    return (
-      <div className="min-h-[100vh] bg-gradient-to-br from-black via-gray-900 to-black text-white">
+      <div className="min-h-[100dvh] bg-gradient-to-br from-black via-gray-900 to-black text-white">
          {/* Toast Notification - Responsive positioning */}
          {toast.visible && (
-            <div className="fixed top-4 right-4 left-4 sm:left-auto sm:top-6 sm:right-6 animate-slideIn">
+            <div className="fixed top-4 right-4 left-4 sm:left-auto sm:top-6 sm:right-6 animate-slideIn z-50">
                <div
                   className={`px-4 py-3 sm:px-6 rounded-xl shadow-lg flex items-center gap-2 border backdrop-blur-md ${
                      toast.type === 'error'
@@ -129,10 +129,10 @@ Return only hashtags separated by spaces, no explanations.`,
          )}
 
          {/* Main Content - Responsive padding and layout */}
-         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-6 max-h-[100vh] overflow-auto customScrollbar">
+         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-6 max-h-[100dvh] overflow-auto customScrollbar">
             <button
                onClick={() => setSidebarOpen((prev) => !prev)}
-               className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
+               className="fixed top-6 left-6 z-40 p-3 rounded-2xl 
                               bg-white/10 backdrop-blur-xl border border-white/20
                               hover:bg-white/20 hover:scale-105
                               active:scale-95

@@ -1,12 +1,11 @@
 @import 'tailwindcss';
 
 html,
-body,
-#root {
+body {
+   background-color: #000;
    height: 100%;
    margin: 0;
-   padding: 0;
-   overflow: hidden; /* Prevents scrollbars from adding extra space */
+   overflow-x: hidden;
 }
 
 .customScrollbar {
