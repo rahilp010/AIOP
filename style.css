@@ -2,6 +2,7 @@
 
 html,
 body {
+   background: linear-gradient(to bottom right, #111827, #000000, #111827);
    height: 100%;
    margin: 0;
    padding: 0;
