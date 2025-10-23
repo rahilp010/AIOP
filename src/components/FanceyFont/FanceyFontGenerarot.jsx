@@ -5,11 +5,56 @@ import { toast } from 'react-toastify';
 import Navbar from '../Navbar';
 import fontMaps from './text';
 
+// Toast notification component
+const Toast = ({ toast }) => {
+   if (!toast.visible) return null;
+   const isSuccess = toast.type === 'success';
+
+   return (
+      <div className="fixed top-6 right-6 z-50 animate-slideIn">
+         <div
+            className={`px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border backdrop-blur-md
+          ${
+             isSuccess
+                ? 'bg-green-500/20 border-green-400 text-green-100'
+                : 'bg-red-500/20 border-red-400 text-red-100'
+          }`}>
+            {isSuccess ? (
+               <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2">
+                  <polyline points="20 6 9 17 4 12" />
+               </svg>
+            ) : (
+               <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2">
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="18" y1="6" x2="6" y2="18" />
+               </svg>
+            )}
+            <p className="text-sm">{toast.message}</p>
+         </div>
+      </div>
+   );
+};
+
 const FancyFontGenerator = () => {
    const [inputText, setInputText] = useState('');
    const [includeEmojis, setIncludeEmojis] = useState(false);
    const [copiedIndex, setCopiedIndex] = useState(null);
    const [favorites, setFavorites] = useState([]);
+   const [toast, setToast] = useState({
+      message: '',
+      type: 'success',
+      visible: false,
+   });
 
    const transformations = useMemo(
       () => [
@@ -48,12 +93,22 @@ const FancyFontGenerator = () => {
       []
    );
 
+   const showNotification = useCallback(
+      (message, type = 'success', duration = 3000) => {
+         setToast({ message, type, visible: true });
+         setTimeout(
+            () => setToast((prev) => ({ ...prev, visible: false })),
+            duration
+         );
+      },
+      []
+   );
+
    /** 🔹 Copy Handler */
    const handleCopy = useCallback((text, index) => {
       navigator.clipboard.writeText(text);
       setCopiedIndex(index);
-      toast.success('Copied to clipboard!', { autoClose: 1500 });
-      setTimeout(() => setCopiedIndex(null), 2000);
+      showNotification('Copied to clipboard!', 'success', 2000);
    }, []);
 
    /** 🔹 Favorite Handler */
@@ -128,6 +183,8 @@ const FancyFontGenerator = () => {
             isMobile={isMobile}
          />
 
+         <Toast toast={toast} />
+
          {/* Header */}
          <div className="text-center mb-12 mt-10">
             <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
@@ -167,8 +224,8 @@ const FancyFontGenerator = () => {
             </div>
          </div>
 
-         {/* Transformations */}
-         <div className="w-full max-w-3xl grid grid-cols-1 gap-4">
+         {/* Transformations (Cleaner UI) */}
+         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-5">
             {sortedTransformations.map(
                ({ name, icon, mapKey, transform, previewStyle }, index) => {
                   const copyText = applyEmojis(
@@ -180,58 +237,58 @@ const FancyFontGenerator = () => {
                   return (
                      <div
                         key={name}
-                        className="group bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-md hover:shadow-lg">
-                        <div className="flex justify-between items-center gap-5">
-                           {/* Font preview */}
-                           <div className="flex items-center gap-4 flex-1 min-w-0">
-                              <div className="text-3xl text-gray-400 shrink-0">
+                        className="bg-gradient-to-br from-white/5 to-transparent border border-white/10
+                     rounded-3xl p-6 flex flex-col justify-between shadow-lg 
+                     hover:shadow-xl hover:border-white/20 transition-all duration-300
+                     backdrop-blur-xl group">
+                        {/* Header: Icon + Title */}
+                        <div className="flex justify-between items-center mb-3">
+                           <div className="flex items-center gap-3">
+                              <span className="text-2xl text-gray-400">
                                  {icon}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                 <div className="text-xs flex gap-3 items-center text-gray-500 mb-1 font-medium uppercase tracking-wider">
-                                    <span>{name}</span>
-                                    {index < 3 && (
-                                       <span className="rounded-4xl px-4 py-1 bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-semibold shadow-md">
-                                          TRENDING
-                                       </span>
-                                    )}
-                                 </div>
-                                 <div className="text-white text-lg break-words">
-                                    {previewStyle ? (
-                                       <span style={previewStyle}>
-                                          {copyText.replace(
-                                             /[\u0336\u0331]/g,
-                                             ''
-                                          )}
-                                       </span>
-                                    ) : (
-                                       copyText
-                                    )}
-                                 </div>
-                              </div>
+                              </span>
+                              <span className="text-sm tracking-wide text-gray-300 font-medium">
+                                 {name}
+                              </span>
                            </div>
 
-                           {/* Favorite Button */}
+                           {/* Favorite button */}
                            <Heart
-                              size={22}
-                              className={`cursor-pointer transition-all duration-200 hover:scale-125 ${
+                              size={20}
+                              className={`cursor-pointer transition-transform duration-200 hover:scale-125 ${
                                  isFav
                                     ? 'text-red-500'
-                                    : 'text-gray-500 hover:text-red-500'
+                                    : 'text-gray-500 hover:text-red-400'
                               }`}
                               onClick={() => handleFavorite(name)}
                               fill={isFav ? 'currentColor' : 'none'}
                            />
+                        </div>
 
-                           {/* Copy Button */}
+                        {/* Font Preview */}
+                        <div
+                           className="text-white text-xl leading-relaxed break-words 
+                       mb-5 tracking-wide">
+                           {previewStyle ? (
+                              <span style={previewStyle}>
+                                 {copyText.replace(/[\u0336\u0331]/g, '')}
+                              </span>
+                           ) : (
+                              copyText
+                           )}
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex justify-end">
                            <button
                               onClick={() => handleCopy(copyText, index)}
-                              className={`px-5 py-2.5 rounded-xl flex items-center gap-2 font-medium transition-all duration-200 shadow ${
-                                 isCopied
-                                    ? 'bg-gray-700 text-white'
-                                    : 'bg-white text-black hover:bg-gray-200'
-                              }`}>
-                              <Copy size={18} />
+                              className={`px-5 py-2 rounded-xl flex items-center gap-2 text-sm font-medium
+                          transition-all duration-200 shadow-md active:scale-95 cursor-pointer ${
+                             isCopied
+                                ? 'bg-gray-700 text-white'
+                                : 'bg-white text-black hover:bg-gray-100'
+                          }`}>
+                              <Copy size={16} />
                               <span>{isCopied ? 'Copied!' : 'Copy'}</span>
                            </button>
                         </div>
@@ -240,6 +297,47 @@ const FancyFontGenerator = () => {
                }
             )}
          </div>
+         <style jsx>{`
+            @keyframes fade-in-down {
+               from {
+                  opacity: 0;
+                  transform: translateY(-20px);
+               }
+               to {
+                  opacity: 1;
+                  transform: translateY(0);
+               }
+            }
+            @keyframes slideIn {
+               from {
+                  transform: translateX(100%);
+                  opacity: 0;
+               }
+               to {
+                  transform: translateX(0);
+                  opacity: 1;
+               }
+            }
+            @keyframes fade-in {
+               from {
+                  opacity: 0;
+                  transform: scale(0.95);
+               }
+               to {
+                  opacity: 1;
+                  transform: scale(1);
+               }
+            }
+            .animate-slideIn {
+               animation: slideIn 0.3s ease-out;
+            }
+            .animate-fade-in-down {
+               animation: fade-in-down 0.6s ease-out;
+            }
+            .animate-fade-in {
+               animation: fade-in 0.5s ease-out;
+            }
+         `}</style>
       </div>
    );
 };
