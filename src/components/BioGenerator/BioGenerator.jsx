@@ -244,7 +244,7 @@ Return only the three bios separated clearly with line breaks (--- between each)
                      onClick={handleSubmit}
                      disabled={isLoading}
                      className="w-full py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg 
-                     bg-gradient-to-r from-black/60 to-gray-800/60 
+                     bg-gradient-to-r from-purple-500/10 to-pink-500/10 
                      border border-white/10 backdrop-blur-md 
                      hover:from-gray-900/70 hover:to-black/70 
                      hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
@@ -284,78 +284,42 @@ Return only the three bios separated clearly with line breaks (--- between each)
                   </button>
 
                   {/* Results Section - Responsive height and padding */}
-                  <div className="relative max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-y-auto border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-md customScrollbar">
-                     {bio.length > 0 && (
-                        <button
-                           onClick={handleCopy}
-                           className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition z-10"
-                           aria-label="Copy bio">
-                           {isCopied ? (
-                              <svg
-                                 className="w-4 h-4 text-green-400"
-                                 viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 strokeWidth="2">
-                                 <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                           ) : (
-                              <svg
-                                 className="w-4 h-4 text-white"
-                                 viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 strokeWidth="2">
-                                 <rect
-                                    x="9"
-                                    y="9"
-                                    width="13"
-                                    height="13"
-                                    rx="2"
-                                    ry="2"
-                                 />
-                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                              </svg>
-                           )}
-                        </button>
-                     )}
-
-                     {/* Hashtags Grid - Responsive gap and sizing */}
-                     <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-                        {isLoading ? (
-                           [...Array(12)].map((_, i) => (
-                              <div
-                                 key={i}
-                                 className="w-20 h-6 sm:w-24 sm:h-7 bg-white/10 rounded-full animate-shimmer"
-                              />
-                           ))
-                        ) : bio.length ? (
-                           bio.map((text, i) => (
-                              <div
-                                 key={i}
-                                 className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 
-      border border-white/20 rounded-xl p-4 sm:p-5 text-sm sm:text-base 
-      text-gray-100 leading-relaxed whitespace-pre-line hover:scale-[1.01] 
-      transition-transform duration-200 shadow-lg shadow-black/20">
-                                 {text}
-                              </div>
-                           ))
-                        ) : (
-                           <div className="h-24 sm:h-32 flex items-center justify-center">
-                              <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-2">
-                                 <PiSparkleLight
-                                    size={20}
-                                    className="hidden sm:block"
-                                 />
-                                 <PiSparkleLight
-                                    size={16}
-                                    className="sm:hidden"
-                                 />
-                                 No Insta Bio yet.
-                              </p>
+                  <div
+                     className={`flex flex-wrap justify-center gap-2 sm:gap-3 ${
+                        bio.length
+                           ? 'border-none bg-transparent'
+                           : 'border border-white/10 bg-white/5 rounded-2xl p-4 sm:p-6'
+                     }`}>
+                     {isLoading ? (
+                        [...Array(12)].map((_, i) => (
+                           <div
+                              key={i}
+                              className="w-20 h-6 sm:w-24 sm:h-7 bg-white/10 rounded-full animate-shimmer"
+                           />
+                        ))
+                     ) : bio.length ? (
+                        bio.map((text, i) => (
+                           <div
+                              key={i}
+                              className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 
+            border border-white/20 rounded-xl p-4 sm:p-5 text-sm sm:text-base 
+            text-gray-100 leading-relaxed whitespace-pre-line hover:scale-[1.01] 
+            transition-transform duration-200 shadow-lg shadow-black/20">
+                              {text}
                            </div>
-                        )}
-                     </div>
+                        ))
+                     ) : (
+                        <div className="h-24 sm:h-32 flex items-center justify-center">
+                           <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-2">
+                              <PiSparkleLight
+                                 size={20}
+                                 className="hidden sm:block"
+                              />
+                              <PiSparkleLight size={16} className="sm:hidden" />
+                              No Insta Bio yet.
+                           </p>
+                        </div>
+                     )}
                   </div>
 
                   {/* Keyboard Shortcut Hint - Hidden on very small screens */}
