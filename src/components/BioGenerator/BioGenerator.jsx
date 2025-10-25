@@ -55,7 +55,7 @@ Generate 3 unique, catchy, and engaging Instagram bios for the following user de
 
 Each bio should:
 - Have a distinct style but match the "${tone}" tone.
-- Be at least **2 lines long** (around 200–300 characters total).
+- Be maximum **3 lines long** (around 150 characters total).
 - Be natural, readable, and formatted cleanly with line breaks.
 - Include relevant emojis if appropriate.
 - NOT include hashtags or extra commentary.
@@ -284,7 +284,7 @@ Return only the three bios separated clearly with line breaks (--- between each)
                   </button>
 
                   {/* Results Section - Responsive height and padding */}
-                  <div className="relative max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-y-auto border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-md">
+                  <div className="relative max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-y-auto border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-md customScrollbar">
                      {bio.length > 0 && (
                         <button
                            onClick={handleCopy}
