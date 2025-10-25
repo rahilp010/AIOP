@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Copy, Heart, Menu, X } from 'lucide-react';
-import { toast } from 'react-toastify';
 import Navbar from '../Navbar';
 import fontMaps from './text';
+import { CiMenuFries } from 'react-icons/ci';
 
 // Toast notification component
 const Toast = ({ toast }) => {
@@ -162,19 +162,15 @@ const FancyFontGenerator = () => {
    return (
       <div className="relative max-h-[100dvh] flex flex-col items-center py-16 px-4 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-y-auto customScrollbar">
          {/* 🔹 Always visible hamburger button */}
-         <button
+         <div
             onClick={toggleSidebar}
             className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
                      bg-white/10 backdrop-blur-xl border border-white/20
                      hover:bg-white/20 hover:scale-105
                      active:scale-95 transition-all duration-300 
-                     shadow-lg shadow-black/20">
-            {sidebarOpen ? (
-               <X size={24} className="text-white" />
-            ) : (
-               <Menu size={24} className="text-white" />
-            )}
-         </button>
+                     shadow-lg shadow-black/20 cursor-pointer">
+            <CiMenuFries size={24} className="text-white" />
+         </div>
 
          {/* Navbar */}
          <Navbar

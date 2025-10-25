@@ -130,16 +130,16 @@ Return only hashtags separated by spaces, no explanations.`,
 
          {/* Main Content - Responsive padding and layout */}
          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-6 max-h-[100dvh] overflow-auto customScrollbar">
-            <button
+            <div
                onClick={() => setSidebarOpen((prev) => !prev)}
                className="fixed top-6 left-6 z-40 p-3 rounded-2xl 
                               bg-white/10 backdrop-blur-xl border border-white/20
                               hover:bg-white/20 hover:scale-105
                               active:scale-95
                               transition-all duration-300 
-                              shadow-lg shadow-black/20">
+                              shadow-lg shadow-black/20 cursor-pointer">
                <CiMenuFries size={24} className="text-white" />
-            </button>
+            </div>
 
             <Navbar
                sidebarOpen={sidebarOpen}

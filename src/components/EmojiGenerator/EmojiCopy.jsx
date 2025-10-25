@@ -150,16 +150,16 @@ export default function EmojiCopy() {
 
    return (
       <div className="min-h-[100dvh] bg-gradient-to-br from-black via-gray-900 to-black text-white font-sans px-4 py-20 md:px-10 relative overflow-y-auto h-[100dvh] customScrollbar indexwise">
-         <button
+         <div
             onClick={() => setSidebarOpen((prev) => !prev)}
             className="fixed top-6 left-6 z-50 p-3 rounded-2xl 
                               bg-white/10 backdrop-blur-xl border border-white/20
                               hover:bg-white/20 hover:scale-105
                               active:scale-95
                               transition-all duration-300 
-                              shadow-lg shadow-black/20">
+                              shadow-lg shadow-black/20 cursor-pointer">
             <CiMenuFries size={24} className="text-white" />
-         </button>
+         </div>
 
          <Navbar
             sidebarOpen={sidebarOpen}
