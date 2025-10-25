@@ -3,6 +3,7 @@ import { PiSparkleLight } from 'react-icons/pi';
 import Navbar from '../Navbar';
 import { CiMenuFries } from 'react-icons/ci';
 import { SelectPicker } from 'rsuite';
+import { Copy } from 'lucide-react';
 
 export default function BioGenerator() {
    const [description, setDescription] = useState('');
@@ -37,7 +38,7 @@ export default function BioGenerator() {
       );
    };
 
-   const generateBio = async (desc) => {
+   const generateBio = async (desc, tone) => {
       try {
          const res = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -49,18 +50,24 @@ export default function BioGenerator() {
                      {
                         parts: [
                            {
-                              text: `You are a creative social media strategist and Instagram bio expert.
-Generate 3 unique, catchy, and engaging Instagram bios for the following user description:
-"${desc}"
+                              text: `
+You are a professional Instagram bio writer and social media branding expert.
+Generate 3 unique, catchy, and creative Instagram bios for the following user:
+Description: "${desc}"
+Tone: "${tone}"
 
 Each bio should:
-- Have a distinct style but match the "${tone}" tone.
-- Be maximum **3 lines long** (around 150 characters total).
-- Be natural, readable, and formatted cleanly with line breaks.
+- Match the selected tone (e.g., funny, aesthetic, professional, bold, minimalist, flirty, etc.)
+- Be clear, natural, and easy to read
+- Stay within 150 characters
+- Use emojis only if they fit the tone
+- Avoid hashtags, quotes, or unnecessary symbols
+- Make each bio distinct from the others
 - Include relevant emojis if appropriate.
-- NOT include hashtags or extra commentary.
 
-Return only the three bios separated clearly with line breaks (--- between each).`,
+Format output as plain text — no bullet points or explanations.
+Separate each bio with ---
+                           `,
                            },
                         ],
                      },
@@ -71,19 +78,20 @@ Return only the three bios separated clearly with line breaks (--- between each)
 
          if (!res.ok) throw new Error('Failed to fetch bio');
          const data = await res.json();
+
          const text =
             data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
 
          if (!text) throw new Error('No bio generated');
 
-         // Split 3 bios using separator (---)
+         // Split by --- and clean up
          const bios = text
             .split(/---+/)
             .map((b) => b.trim())
             .filter((b) => b.length > 0);
 
-         showNotification('✅ 3 Bios generated successfully!');
-         return bios.length ? bios : [text]; // fallback in case no split worked
+         showNotification('✅ 3 Instagram bios generated successfully!');
+         return bios.length ? bios : [text];
       } catch (err) {
          console.error('Gemini API error:', err);
          showNotification(err.message || 'Error generating bio', 'error');
@@ -101,7 +109,7 @@ Return only the three bios separated clearly with line breaks (--- between each)
       setIsLoading(true);
       setBio([]);
 
-      const bio = await generateBio(description);
+      const bio = await generateBio(description, tone);
       setBio(bio);
       setIsLoading(false);
    };
@@ -301,11 +309,21 @@ Return only the three bios separated clearly with line breaks (--- between each)
                         bio.map((text, i) => (
                            <div
                               key={i}
-                              className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 
-            border border-white/20 rounded-xl p-4 sm:p-5 text-sm sm:text-base 
-            text-gray-100 leading-relaxed whitespace-pre-line hover:scale-[1.01] 
-            transition-transform duration-200 shadow-lg shadow-black/20">
+                              className="w-full relative bg-gradient-to-r from-purple-500/10 to-pink-500/10 
+      border border-white/20 rounded-xl p-4 sm:p-5 text-sm sm:text-base 
+      text-gray-100 leading-relaxed whitespace-pre-line hover:scale-[1.01] 
+      transition-transform duration-200 shadow-lg shadow-black/20 flex items-center justify-between">
                               {text}
+
+                              {/* Copy Button */}
+                              <button
+                                 onClick={() => {
+                                    navigator.clipboard.writeText(text);
+                                    showNotification('Bio copied!');
+                                 }}
+                                 className="text-gray-300 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all text-xs sm:text-sm">
+                                 <Copy size={32} className="p-2" />
+                              </button>
                            </div>
                         ))
                      ) : (
