@@ -5,6 +5,7 @@ import { ToastContainer, Zoom } from 'react-toastify';
 import { Routes, Route } from 'react-router-dom';
 import CoolSymbol from './components/CoolSymbol/CoolSymbol';
 import HashtagGenerator from './components/Hashtag/HashtagGenerator';
+import BioGenerator from './components/BioGenerator/BioGenerator';
 
 function App() {
    return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/fontgenerator" element={<FancyFontGenerator />} />
             <Route path="/symbol" element={<CoolSymbol />} />
             <Route path="/hashtaggenerator" element={<HashtagGenerator />} />
+            <Route path="/bio" element={<BioGenerator />} />
          </Routes>
       </>
    );

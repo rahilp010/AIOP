@@ -1,7 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { CiMenuFries } from "react-icons/ci";
-import { Home, Menu, X, Hash, Type, Smile, Sparkles } from 'lucide-react';
+import { CiMenuFries } from 'react-icons/ci';
+import {
+   Home,
+   Menu,
+   X,
+   Hash,
+   Type,
+   Smile,
+   Sparkles,
+   Sparkle,
+} from 'lucide-react';
 
 const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
    const location = useLocation();
@@ -40,6 +49,13 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
          title: 'Hashtag',
          path: '/hashtaggenerator',
          icon: Hash,
+         gradient: 'from-red-500/20 to-rose-500/20',
+         borderColor: 'border-red-400/30',
+      },
+      {
+         title: 'Instagram Bio Generator',
+         path: '/bio',
+         icon: Sparkle,
          gradient: 'from-red-500/20 to-rose-500/20',
          borderColor: 'border-red-400/30',
       },
