@@ -184,7 +184,7 @@ Return only hashtags separated by spaces, no explanations.`,
                      onClick={handleSubmit}
                      disabled={isLoading}
                      className="w-full py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg 
-                     bg-gradient-to-r from-black/60 to-gray-800/60 
+                     bg-gradient-to-r from-purple-500/10 to-pink-500/10  
                      border border-white/10 backdrop-blur-md 
                      hover:from-gray-900/70 hover:to-black/70 
                      hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
