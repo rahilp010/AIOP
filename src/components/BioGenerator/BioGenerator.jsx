@@ -210,8 +210,8 @@ Separate bios with ---
                   <button
                      onClick={handleSubmit}
                      disabled={isLoading}
-                     className="w-full py-4 rounded-2xl font-semibold text-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 
-                     border border-white/10 hover:from-gray-900/70 hover:to-black/70 hover:border-white/20 
+                     className="w-full py-4 rounded-2xl font-semibold text-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10
+                     border-2 border-white/50 hover:from-gray-900/70 hover:to-black/70 hover:border-white/20 
                      transition-all hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed">
                      {isLoading ? (
                         <div className="flex items-center justify-center gap-2">
@@ -238,7 +238,7 @@ Separate bios with ---
                         </div>
                      ) : (
                         <div className="flex items-center justify-center gap-3">
-                           <PiSparkleLight size={20} />
+                           <PiSparkleLight size={22} />
                            <span>Generate Bio</span>
                         </div>
                      )}
