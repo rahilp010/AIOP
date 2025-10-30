@@ -271,6 +271,7 @@ Return only hashtags separated by spaces, no explanations.`,
                            ))
                         ) : hashtags.length ? (
                            hashtags.map((tag, i) => (
+                              
                               <span
                                  key={i}
                                  className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 
