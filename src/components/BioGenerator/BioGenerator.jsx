@@ -167,7 +167,6 @@ Separate bios with ---
                         Generate creative, catchy Instagram bios with AI ✨
                      </p>
                   </div>
-
                   {/* 📝 Description */}
                   <div>
                      <label className="block mb-2 font-semibold text-gray-200 text-sm sm:text-base">
@@ -187,7 +186,6 @@ Separate bios with ---
                         {description.length}/300 characters
                      </div>
                   </div>
-
                   {/* 🎭 Tone Selection (Grid Layout) */}
                   <div className="space-y-3">
                      <label className="block font-semibold text-gray-200 text-sm sm:text-base">
@@ -208,7 +206,6 @@ Separate bios with ---
                         ))}
                      </div>
                   </div>
-
                   {/* ⚡ Generate Button */}
                   <button
                      onClick={handleSubmit}
@@ -246,7 +243,6 @@ Separate bios with ---
                         </div>
                      )}
                   </button>
-
                   {/* 🧾 Result Section */}
                   <div className="flex flex-col gap-3">
                      {isLoading ? (
@@ -260,34 +256,57 @@ Separate bios with ---
                         bio.map((text, i) => (
                            <div
                               key={i}
-                              className={`relative bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-white/20 rounded-xl 
-                              p-4 text-sm sm:text-base text-gray-100 leading-relaxed transition-all duration-200 
-                              shadow-lg shadow-black/20 flex items-center justify-between group ${
-                                 copiedIndex === i
-                                    ? 'ring-2 ring-white/30 scale-[1.02]'
-                                    : 'hover:scale-[1.01]'
-                              }`}>
+                              className={`w-full relative bg-gradient-to-r from-purple-500/10 to-pink-500/10 
+            border border-white/20 rounded-xl p-4 sm:p-5 text-sm sm:text-base 
+            text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-200 
+            shadow-lg shadow-black/20 flex items-center justify-between group ${
+               isCopied === i
+                  ? 'ring-2 ring-white/30 scale-[1.02]'
+                  : 'hover:scale-[1.01]'
+            }`}>
                               <span className="pr-10">{text}</span>
+
+                              {/* Copy Button */}
                               <button
-                                 onClick={() => handleCopy(text, i)}
+                                 onClick={() => {
+                                    navigator.clipboard.writeText(text);
+                                    setIsCopied(i);
+                                    showNotification('Bio copied!');
+                                    setTimeout(() => setIsCopied(false), 1500);
+                                 }}
                                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white 
-                                 bg-white/10 hover:bg-white/20 p-2 rounded-full transition-all">
+               bg-white/10 hover:bg-white/20 p-2 rounded-full transition-all">
                                  <Copy size={18} />
                               </button>
                            </div>
                         ))
                      ) : (
-                        <div className="h-24 sm:h-32 flex items-center justify-center">
+                        <div className="h-24 sm:h-32 flex items-center justify-center border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl backdrop-blur-md">
                            <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-2">
                               <PiSparkleLight
                                  size={20}
                                  className="hidden sm:block"
                               />
                               <PiSparkleLight size={16} className="sm:hidden" />
-                              No hashtags yet.
+                              No Insta Bio yet.
                            </p>
                         </div>
                      )}
+                  </div>
+                  {/* Keyboard Shortcut Hint - Hidden on very small screens */}{' '}
+                  <div className="hidden sm:block text-center text-xs text-gray-500">
+                     {' '}
+                     Press{' '}
+                     <kbd className="px-2 py-1 bg-white/10 rounded border border-white/20">
+                        {' '}
+                        Ctrl{' '}
+                     </kbd>{' '}
+                     +{' '}
+                     <kbd className="px-2 py-1 bg-white/10 rounded border border-white/20">
+                        {' '}
+                        Enter{' '}
+                     </kbd>{' '}
+                     to generate{' '}
                   </div>
                </div>
             </div>
