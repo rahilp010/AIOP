@@ -260,7 +260,7 @@ Separate bios with ---
             border border-white/20 rounded-xl p-4 sm:p-5 text-sm sm:text-base 
             text-gray-100 leading-relaxed whitespace-pre-line transition-all duration-200 
             shadow-lg shadow-black/20 flex items-center justify-between group ${
-               isCopied === i
+               copiedIndex === i
                   ? 'ring-2 ring-white/30 scale-[1.02]'
                   : 'hover:scale-[1.01]'
             }`}>
@@ -268,12 +268,7 @@ Separate bios with ---
 
                               {/* Copy Button */}
                               <button
-                                 onClick={() => {
-                                    navigator.clipboard.writeText(text);
-                                    setIsCopied(i);
-                                    showNotification('Bio copied!');
-                                    setTimeout(() => setIsCopied(false), 1500);
-                                 }}
+                                 onClick={handleCopy}
                                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white 
                bg-white/10 hover:bg-white/20 p-2 rounded-full transition-all">
                                  <Copy size={18} />
