@@ -704,12 +704,12 @@ export default function CoolSymbol() {
 
          {/* Symbol Grid */}
          <div
-            className="max-w-6xl mx-auto p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg 
+            className="max-w-4xl mx-auto p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-lg 
                       shadow-2xl shadow-black/20 animate-fade-in overflow-y-auto customScrollbar h-[75vh]">
             <h2 className="text-2xl font-semibold mb-6 text-yellow-400">
                {activeSymbols.title}
             </h2>
-            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
+            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-10 gap-1.5">
                {activeSymbols.symbols.map((symbol, i) => (
                   <SymbolButton key={i} symbol={symbol} onCopy={handleCopy} />
                ))}
