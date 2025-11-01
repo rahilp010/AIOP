@@ -66,6 +66,20 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
          gradient: 'from-green-500 via-yellow-500 to-cyan-500',
          borderColor: 'border-red-400/30',
       },
+      {
+         title: 'Paraphrase',
+         path: '/paraphrase',
+         icon: Sparkle,
+         gradient: 'from-red-500 via-yellow-500 to-blue-500',
+         borderColor: 'border-red-400/30',
+      },
+      {
+         title: 'Username Generator',
+         path: '/username',
+         icon: Sparkle,
+         gradient: 'from-violet-500 via-blue-500 to-blue-500',
+         borderColor: 'border-red-400/30',
+      },
    ];
 
    useEffect(() => {

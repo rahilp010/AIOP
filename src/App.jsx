@@ -7,6 +7,8 @@ import CoolSymbol from './components/CoolSymbol/CoolSymbol';
 import HashtagGenerator from './components/Hashtag/HashtagGenerator';
 import BioGenerator from './components/BioGenerator/BioGenerator';
 import WordCounter from './components/WordCounter/WordCounter';
+import Paraphrase from './components/Paraphrase/Paraphrase';
+import UsernameGenerator from './components/UserName/UserName';
 
 function App() {
    return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/hashtaggenerator" element={<HashtagGenerator />} />
             <Route path="/bio" element={<BioGenerator />} />
             <Route path="/wordcounter" element={<WordCounter />} />
+            <Route path="/paraphrase" element={<Paraphrase />} />
+            <Route path="/username" element={<UsernameGenerator />} />
          </Routes>
       </>
    );

@@ -4,11 +4,10 @@ import Navbar from '../Navbar';
 import { FaBars } from 'react-icons/fa';
 
 import { Copy } from 'lucide-react';
-import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 
-export default function BioGenerator() {
+export default function Paraphrase() {
    const [description, setDescription] = useState('');
-   const [bio, setBio] = useState([]);
+   const [paraphrase, setParaphrase] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const [copiedIndex, setCopiedIndex] = useState(null);
    const [toast, setToast] = useState({
@@ -37,7 +36,7 @@ export default function BioGenerator() {
    };
 
    /** 🤖 Generate bio using Gemini API */
-   const generateBio = async (desc, tone) => {
+   const generateParaphrase = async (desc, tone) => {
       try {
          const res = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -50,17 +49,16 @@ export default function BioGenerator() {
                         parts: [
                            {
                               text: `
-You are a professional Instagram bio writer.
-Generate 6 unique, catchy Instagram bios for:
-Description: "${desc}"
-Tone: "${tone}"
+Rephrase the following text into 3 distinct paraphrased versions, keeping the original meaning intact:
+"${desc}"
 
-Each bio should:
-- Match the tone
-- Stay under 150 characters
-- Use emojis if they fit the tone
-- Be distinct
-Separate bios with ---
+Each version should:
+- Be written in a **${tone}** tone.
+- Be concise (1 sentence each).
+- Avoid repetition or hashtags unless they naturally fit the tone.
+- Use emojis where appropriate.
+Return only the 3 paraphrased versions, clearly separated by:
+---
 `,
                            },
                         ],
@@ -76,13 +74,13 @@ Separate bios with ---
             data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
          if (!text) throw new Error('No bio generated');
 
-         const bios = text
+         const paraphrases = text
             .split(/---+/)
             .map((b) => b.trim())
             .filter((b) => b.length > 0);
 
-         showNotification('✅ 3 Instagram bios generated!');
-         return bios.length ? bios : [text];
+         showNotification('✅ 3 Paraphrases generated!');
+         return paraphrases.length ? paraphrases : [text];
       } catch (err) {
          console.error('Gemini API error:', err);
          showNotification(err.message || 'Error generating bio', 'error');
@@ -98,10 +96,10 @@ Separate bios with ---
          return showNotification('Max 300 characters allowed', 'error');
 
       setIsLoading(true);
-      setBio([]);
+      setParaphrase([]);
 
-      const result = await generateBio(description, tone);
-      setBio(result);
+      const result = await generateParaphrase(description, tone);
+      setParaphrase(result);
       setIsLoading(false);
    };
 
@@ -109,22 +107,22 @@ Separate bios with ---
    const handleCopy = (text, index) => {
       navigator.clipboard.writeText(text);
       setCopiedIndex(index);
-      showNotification('Bio copied!');
+      showNotification('Paraphrase copied!');
       setTimeout(() => setCopiedIndex(null), 1500);
    };
 
    /** 🎨 Tone options */
    const toneOptions = [
-      { label: '😂 Funny', value: 'funny' },
-      { label: '😐 Serious', value: 'serious' },
-      { label: '🎨 Creative', value: 'creative' },
-      { label: '🌟 Inspirational', value: 'inspirational' },
-      { label: '💪 Motivational', value: 'motivational' },
+      { label: '🙂 Friendly', value: 'friendly' },
+      { label: '💎 Luxury', value: 'luxury' },
+      { label: '🎨 Artistic', value: 'artistic' },
+      { label: '😌 Relaxed', value: 'relaxed' },
+      { label: '🧐 Motivational', value: 'motivational' },
       { label: '😄 Humorous', value: 'humorous' },
-      { label: '😜 Playful', value: 'playful' },
-      { label: '😊 Charming', value: 'charming' },
+      { label: '💼 Professional', value: 'professional' },
+      { label: '💡 Witty', value: 'witty' },
       { label: '✨ Charismatic', value: 'charismatic' },
-      { label: '😢 Sad', value: 'sad' },
+      { label: '💪🏼 Bold', value: 'bold' },
    ];
 
    return (
@@ -162,17 +160,18 @@ Separate bios with ---
                <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-8">
                   {/* 🧠 Header */}
                   <div className="text-center space-y-3">
-                     <h1 className="text-5xl font-extrabold bg-gradient-to-br from-white/70 via-white to-black bg-clip-text text-transparent">
-                        Bio Generator
+                     <h1 className="text-5xl font-extrabold bg-gradient-to-br from-white/70 via-white to-gray-300 bg-clip-text text-transparent">
+                        Paraphrase
                      </h1>
                      <p className="text-gray-300 text-sm sm:text-base">
-                        Generate creative, catchy Instagram bios with AI ✨
+                        This tool makes rephrasing text easy. Generate unique
+                        content in a click.
                      </p>
                   </div>
                   {/* 📝 Description */}
                   <div>
                      <label className="block mb-2 font-semibold text-gray-200 text-sm sm:text-base">
-                        Describe yourself
+                        Enter text to paraphrase
                      </label>
                      <textarea
                         value={description}
@@ -254,8 +253,8 @@ Separate bios with ---
                               className="w-full h-7 bg-white/10 rounded-full animate-shimmer"
                            />
                         ))
-                     ) : bio.length ? (
-                        bio.map((text, i) => (
+                     ) : paraphrase.length ? (
+                        paraphrase.map((text, i) => (
                            <div
                               key={i}
                               className={`w-full relative bg-gradient-to-r from-purple-500/10 to-pink-500/10 
@@ -270,7 +269,7 @@ Separate bios with ---
 
                               {/* Copy Button */}
                               <button
-                                 onClick={handleCopy}
+                                 onClick={() => handleCopy(text, i)}
                                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white 
                bg-white/10 hover:bg-white/20 p-2 rounded-full transition-all">
                                  <Copy size={18} />
@@ -278,19 +277,14 @@ Separate bios with ---
                            </div>
                         ))
                      ) : (
-                        <div className="col-span-full flex flex-col items-center justify-center py-16 text-center text-white/70 animate-fade-in">
-                           <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-indigo-400 to-pink-400 opacity-80 flex items-center justify-center shadow-lg shadow-indigo-500/30 animate-pulse">
-                              <GiPerspectiveDiceSixFacesRandom className="text-3xl" />
-                           </div>
-                           <h3 className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                              No Bio yet
-                           </h3>
-                           <p className="text-gray-400 max-w-sm">
-                              Tap{' '}
-                              <span className="text-pink-400 font-medium">
-                                 Generate Bio
-                              </span>{' '}
-                              to create bio instantly ✨
+                        <div className="h-24 sm:h-32 flex items-center justify-center border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl backdrop-blur-md">
+                           <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-2">
+                              <PiSparkleLight
+                                 size={20}
+                                 className="hidden sm:block"
+                              />
+                              <PiSparkleLight size={16} className="sm:hidden" />
+                              No Paraphrase yet.
                            </p>
                         </div>
                      )}

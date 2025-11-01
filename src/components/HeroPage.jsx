@@ -55,6 +55,20 @@ const tools = [
       link: '/wordCounter',
       gradient: 'from-green-500 via-yellow-500 to-cyan-500',
    },
+   {
+      icon: <BiFont size={32} />,
+      title: 'Paraphrase',
+      desc: 'Create personalized and engaging bio content.',
+      link: '/paraphrase',
+      gradient: 'from-red-500 via-indigo-500 to-pink-500',
+   },
+   {
+      icon: <BiFont size={32} />,
+      title: 'Username Generator',
+      desc: 'Create personalized and engaging bio content.',
+      link: '/username',
+      gradient: 'from-violet-500 via-blue-500 to-blue-500',
+   },
 ];
 
 export default function HeroPage() {
