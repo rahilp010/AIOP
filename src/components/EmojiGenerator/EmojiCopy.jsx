@@ -2,7 +2,8 @@
 import React, { useMemo, useState, memo, useCallback, useEffect } from 'react';
 import emojis from 'emoji-datasource';
 import Navbar from '../Navbar';
-import { CiMenuFries } from 'react-icons/ci';
+import { FaBars } from 'react-icons/fa';
+
 import ReactCountryFlag from 'react-country-flag';
 
 // Utility: Convert unified code to emoji char
@@ -261,7 +262,7 @@ export default function EmojiCopy() {
                               active:scale-95
                               transition-all duration-300 
                               shadow-lg shadow-black/20 cursor-pointer">
-            <CiMenuFries size={24} className="text-white" />
+            <FaBars size={20} className="text-white" />
          </div>
 
          <Navbar

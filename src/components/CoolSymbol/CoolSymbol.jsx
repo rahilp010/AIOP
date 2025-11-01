@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import Navbar from '../Navbar';
-import { CiMenuFries } from 'react-icons/ci';
+import { FaBars } from 'react-icons/fa';
 
 const symbolCategories = [
    {
@@ -684,7 +684,7 @@ export default function CoolSymbol() {
                                       active:scale-95
                                       transition-all duration-300 
                                       shadow-lg shadow-black/20 cursor-pointer">
-            <CiMenuFries size={24} className="text-white" />
+            <FaBars size={20} className="text-white" />
          </div>
 
          <Navbar

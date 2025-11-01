@@ -5,10 +5,10 @@ import {
    FaTrash,
    FaDownload,
    FaClock,
+   FaBars,
 } from 'react-icons/fa';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import Navbar from '../Navbar';
-import { CiMenuFries } from 'react-icons/ci';
 
 const WordCounter = () => {
    const [text, setText] = useState('');
@@ -112,6 +112,12 @@ const WordCounter = () => {
       }
    };
 
+   useEffect(() => {
+      if (copied) {
+         showNotification('Text copied to clipboard!');
+      }
+   }, [copied]);
+
    const statCards = [
       {
          label: 'Words',
@@ -156,7 +162,7 @@ const WordCounter = () => {
             onClick={() => setSidebarOpen((prev) => !prev)}
             className="fixed top-6 left-6 z-40 p-3 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-xl 
                        hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-pointer">
-            <CiMenuFries size={24} className="text-white" />
+            <FaBars size={20} className="text-white" />
          </div>
 
          <Navbar
@@ -179,7 +185,7 @@ const WordCounter = () => {
          )}
          <div className="max-w-7xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8 sm:mb-12">
+            <div className="text-center mb-8 sm:mb-12 mt-20 sm:mt-14 md:mt-10">
                <h1 className="text-3xl sm:text-3xl md:text-5xl font-bold mb-4">
                   Word{' '}
                   <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
@@ -248,7 +254,6 @@ const WordCounter = () => {
                      className="w-full h-[calc(80vh-4rem)] p-4 bg-black/50 border border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm sm:text-base resize-none"
                      style={{ fontFamily: 'monospace' }}
                   />
-                  {copied && showNotification('Text copied to clipboard!')}
                </div>
 
                {/* Stats Cards */}
@@ -295,7 +300,7 @@ const WordCounter = () => {
 
             {/* Density Analysis */}
             {text && (
-               <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl">
+               <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl mb-10">
                   <h2 className="text-xl font-semibold mb-4">Text Density</h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                      <div className="bg-black/50 border border-gray-700 rounded-xl p-4 text-center">

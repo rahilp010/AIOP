@@ -2,7 +2,7 @@
 
 html,
 body {
-   background-color: rgba(0, 0, 0, 0);
+   background-color: rgba(0, 0, 0, 1);
    margin: 0;
    padding: 0;
    overflow-x: hidden;
@@ -34,7 +34,6 @@ body {
 
 html {
    scroll-behavior: smooth;
-   overflow: hidden;
 }
 
 @keyframes fadeIn {

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { PiSparkleLight } from 'react-icons/pi';
 import Navbar from '../Navbar';
-import { CiMenuFries } from 'react-icons/ci';
+import { FaBars } from 'react-icons/fa';
+
 import { Copy } from 'lucide-react';
 
 export default function BioGenerator() {
@@ -147,7 +148,7 @@ Separate bios with ---
                onClick={() => setSidebarOpen((prev) => !prev)}
                className="fixed top-6 left-6 z-40 p-3 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-xl 
                hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-pointer">
-               <CiMenuFries size={24} className="text-white" />
+               <FaBars size={20} className="text-white" />
             </div>
 
             <Navbar

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PiSparkleLight } from 'react-icons/pi';
 import Navbar from '../Navbar';
-import { CiMenuFries } from 'react-icons/ci';
+import { FaBars } from 'react-icons/fa';
 
 export default function HashtagGenerator() {
    const [description, setDescription] = useState('');
@@ -138,7 +138,7 @@ Return only hashtags separated by spaces, no explanations.`,
                               active:scale-95
                               transition-all duration-300 
                               shadow-lg shadow-black/20 cursor-pointer">
-               <CiMenuFries size={24} className="text-white" />
+               <FaBars size={20} className="text-white" />
             </div>
 
             <Navbar
@@ -151,7 +151,7 @@ Return only hashtags separated by spaces, no explanations.`,
                <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl backdrop-blur-xl space-y-6 sm:space-y-8 mt-16 ">
                   {/* Header - Responsive text sizes */}
                   <div className="text-center space-y-2 sm:space-y-3">
-                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-br from-white/60 via-white to-black bg-clip-text text-transparent">
+                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-br from-white/60 via-white to-black bg-clip-text text-transparent">
                         InstaHash
                      </h1>
                      <p className="text-sm sm:text-base text-gray-300 px-4">
@@ -271,7 +271,6 @@ Return only hashtags separated by spaces, no explanations.`,
                            ))
                         ) : hashtags.length ? (
                            hashtags.map((tag, i) => (
-                              
                               <span
                                  key={i}
                                  className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 
