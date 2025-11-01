@@ -4,6 +4,8 @@ import { FaBars, FaWandMagicSparkles } from 'react-icons/fa6';
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 import Navbar from '../Navbar';
 import { IoCopyOutline } from 'react-icons/io5';
+import { SelectPicker } from 'rsuite';
+import 'rsuite/dist/rsuite-no-reset.min.css';
 
 const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE'; // Replace with your actual key
 
@@ -13,6 +15,31 @@ const tones = [
    { label: 'Aesthetic', value: 'aesthetic' },
    { label: 'Professional', value: 'professional' },
    { label: 'Gaming', value: 'gaming' },
+];
+
+const platforms = [
+   { label: 'Instagram', value: 'instagram' },
+   { label: 'Threads', value: 'threads' },
+   { label: 'YouTube', value: 'youtube' },
+   { label: 'Facebook', value: 'facebook' },
+   { label: 'X', value: 'x' },
+   { label: 'Snapchat', value: 'snapchat' },
+   { label: 'Reddit', value: 'reddit' },
+   { label: 'Pinterest', value: 'pinterest' },
+   { label: 'TikTok', value: 'tiktok' },
+];
+
+const categories = [
+   { label: 'Random', value: 'random' },
+   { label: 'Luxury', value: 'luxury' },
+   { label: 'Sports', value: 'sports' },
+   { label: 'Music', value: 'music' },
+   { label: 'Movies', value: 'movies' },
+   { label: 'Games', value: 'games' },
+   { label: 'Food', value: 'food' },
+   { label: 'Travel', value: 'travel' },
+   { label: 'Fashion', value: 'fashion' },
+   { label: 'Tech', value: 'tech' },
 ];
 
 const adjectives = [
@@ -43,6 +70,8 @@ const nouns = [
 export default function UsernameGenerator() {
    const [keyword, setKeyword] = useState('');
    const [tone, setTone] = useState('cool');
+   const [platform, setPlatform] = useState('');
+   const [category, setCategory] = useState('');
    const [usernames, setUsernames] = useState([]);
    const [loading, setLoading] = useState(false);
    const [toast, setToast] = useState({
@@ -89,26 +118,34 @@ export default function UsernameGenerator() {
                         parts: [
                            {
                               text: `
-Generate 15 unique, catchy, and platform-ready usernames optimized for Instagram, TikTok, Twitter (X), and YouTube.
+You are a social media branding expert who creates short, catchy, and platform-optimized usernames.
 
-Tone: ${tone}
-Optional keyword or theme: "${keyword}"
+Generate **15 unique usernames** suitable for the following context:
 
-Guidelines:
-- Each username must be short, memorable, and visually appealing.
-- if provide keyword then use it in username.
-- Keep it under 15 characters.
-- Avoid spaces, symbols, or complex punctuation.
-- You can add letters, numbers, or underscores
-- Reflect modern social media naming trends.
-- Adapt style based on the selected tone — for example:
-  • "cool" → sleek, trendy names  
-  • "funny" → playful, witty combinations  
-  • "aesthetic" → soft, elegant, minimalist  
-  • "professional" → clean and brandable  
-  • "gaming" → bold, energetic handles
-- Avoid generic filler words like “user”, “account”, or “profile”.
-- Return usernames separated by **new lines only** with no extra text or explanation.
+Platform: ${platform || 'Any'}
+Tone/Style: ${tone}
+Category/Theme: ${category || 'general'}
+Keyword (optional): ${keyword || 'none'}
+
+🎯 Rules:
+- Each username should be platform-ready and follow ${
+                                 platform
+                                    ? `${platform}'s`
+                                    : 'popular social media'
+                              } username trends.
+- Adapt tone dynamically:
+   • cool → trendy, stylish, modern  
+   • funny → playful, humorous, witty  
+   • aesthetic → elegant, soft, minimalist  
+   • professional → clean, brandable, subtle  
+   • gaming → bold, aggressive, high-energy  
+- Incorporate the keyword naturally if provided.
+- Keep each name **under 15 characters**, easy to remember.
+- Avoid spaces, emojis, and special symbols.
+- Use underscores or short numbers only if it enhances style.
+- Must add numbers in 3 or 4 response out of 15.
+- Ensure all usernames look authentic and could realistically exist on social media.
+- Return **usernames separated by new lines only** — no explanations, bullets, or markdown.
 `,
                            },
                         ],
@@ -187,11 +224,109 @@ Guidelines:
          {/* Controls */}
          <div className="max-w-4xl mx-auto bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg">
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+               <div className="relative w-full">
+                  <select
+                     value={platform}
+                     onChange={(e) => setPlatform(e.target.value)}
+                     className="
+         w-full px-4 py-3 
+         bg-black/40 border border-white/10 text-white rounded-xl
+         focus:ring-2 focus:ring-indigo-400 focus:outline-none 
+         appearance-none cursor-pointer
+         transition-all duration-300
+      ">
+                     <option value="">Select Platform</option>
+                     {platforms.map((p) => (
+                        <option
+                           key={p.value}
+                           value={p.value}
+                           className="bg-gray-900 text-white">
+                           {p.label}
+                        </option>
+                     ))}
+                  </select>
+
+                  {/* Custom dropdown icon */}
+                  <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 20 20"
+                     fill="currentColor"
+                     className="w-5 h-5 text-white/60 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
+                     <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                        clipRule="evenodd"
+                     />
+                  </svg>
+
+                  <style>
+                     {`
+         select option {
+            background-color: rgba(10, 10, 15, 0.95);
+            color: white;
+            padding: 10px;
+         }
+         select option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+         }
+      `}
+                  </style>
+               </div>
+
+               <div className="relative w-full">
+                  <select
+                     value={category}
+                     onChange={(e) => setCategory(e.target.value)}
+                     className="
+         w-full px-4 py-3 
+         bg-black/40 border border-white/10 text-white rounded-xl
+         focus:ring-2 focus:ring-indigo-400 focus:outline-none 
+         appearance-none cursor-pointer
+         transition-all duration-300
+      ">
+                     <option value="">Select Category</option>
+                     {categories.map((c) => (
+                        <option
+                           key={c.value}
+                           value={c.value}
+                           className="bg-gray-900 text-white">
+                           {c.label}
+                        </option>
+                     ))}
+                  </select>
+
+                  {/* Custom dropdown icon */}
+                  <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 20 20"
+                     fill="currentColor"
+                     className="w-5 h-5 text-white/60 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
+                     <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                        clipRule="evenodd"
+                     />
+                  </svg>
+
+                  <style>
+                     {`
+         select option {
+            background-color: rgba(10, 10, 15, 0.95);
+            color: white;
+            padding: 10px;
+         }
+         select option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+         }
+      `}
+                  </style>
+               </div>
+
                <input
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Enter keyword (optional)"
-                  className="flex-1 px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                />
             </div>
 
