@@ -207,6 +207,7 @@ export default function EmojiCopy() {
    // New: Handle search input
    const handleSearchChange = useCallback((e) => {
       setSearchTerm(e.target.value);
+      setSelectedTab('All');
    }, []);
 
    // Optional: Clear search on tab change (uncomment if desired)
@@ -291,7 +292,9 @@ export default function EmojiCopy() {
             {searchTerm && (
                <p className="text-sm text-white/60 mt-2 ml-1 absolute top-2.5 font-semibold right-15">
                   Found{' '}
-                  <span className="font-bold text-red-400">{displayedEmojis.length}</span>{' '}
+                  <span className="font-bold text-red-400">
+                     {displayedEmojis.length}
+                  </span>{' '}
                   emoji
                   {displayedEmojis.length !== 1 ? 's' : ''}
                </p>
