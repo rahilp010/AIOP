@@ -602,7 +602,7 @@ const SymbolButton = memo(({ symbol, onCopy }) => (
                bg-white/5 hover:bg-white/20 active:bg-white/30 rounded-xl 
                transition-all duration-300 ease-out hover:scale-110 hover:rotate-3 
                active:scale-95 shadow-md hover:shadow-lg hover:shadow-yellow-500/20 
-               border border-white/10 relative overflow-hidden group">
+               border border-white/10 relative overflow-hidden group p-3">
       <span className="transition-transform duration-300 group-hover:scale-110">
          {symbol}
       </span>
@@ -612,6 +612,7 @@ const SymbolButton = memo(({ symbol, onCopy }) => (
 
 export default function CoolSymbol() {
    const [activeCategory, setActiveCategory] = useState(0);
+   const [recentEmojis, setRecentEmojis] = useState([]);
    const [toast, setToast] = useState({
       message: '',
       type: 'success',
@@ -643,6 +644,22 @@ export default function CoolSymbol() {
          try {
             await navigator.clipboard.writeText(symbol);
             showNotification(`Copied "${symbol}" to clipboard!`, 'success');
+
+            setRecentEmojis((prev) => {
+               // Remove duplicates and move the current emoji to the top
+               const updated = [
+                  symbol,
+                  ...prev.filter((e) => e.unified !== symbol),
+               ];
+
+               // Limit the list to only 10 recent emojis
+               const limited = updated.slice(0, 10);
+
+               // Save to localStorage
+               localStorage.setItem('recentSymbol', JSON.stringify(limited));
+
+               return limited;
+            });
          } catch {
             showNotification('Failed to copy 😞', 'error');
          }
@@ -701,6 +718,21 @@ export default function CoolSymbol() {
                </button>
             ))}
          </div>
+
+         {recentEmojis.length > 0 && (
+            <div
+               className="max-w-4xl mx-auto mb-10 bg-white/5 border border-white/10 rounded-2xl 
+                   backdrop-blur-lg shadow-lg shadow-black/20 p-6 animate-fade-in">
+               <h2 className="text-xl font-semibold mb-4 text-white/90">
+                  Recently Used
+               </h2>
+               <div className="flex flex-wrap justify-center gap-3">
+                  {recentEmojis.map((emoji, i) => (
+                     <SymbolButton key={i} symbol={emoji} onCopy={handleCopy} />
+                  ))}
+               </div>
+            </div>
+         )}
 
          {/* Symbol Grid */}
          <div
