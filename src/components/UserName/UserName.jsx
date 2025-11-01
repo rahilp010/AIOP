@@ -10,11 +10,14 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE'; // Replace with your actual key
 
 const tones = [
-   { label: 'Cool', value: 'cool' },
-   { label: 'Funny', value: 'funny' },
-   { label: 'Aesthetic', value: 'aesthetic' },
+   { label: 'Casual', value: 'casual' },
+   { label: 'Creative', value: 'creative' },
+   { label: 'Formal', value: 'formal' },
    { label: 'Professional', value: 'professional' },
-   { label: 'Gaming', value: 'gaming' },
+   { label: 'Convincing', value: 'convincing' },
+   { label: 'Friendly', value: 'friendly' },
+   { label: 'Empathetic', value: 'empathetic' },
+   { label: 'Academic', value: 'academic' },
 ];
 
 const platforms = [
