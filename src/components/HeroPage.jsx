@@ -67,7 +67,7 @@ export default function HeroPage() {
 
          {/* Navbar */}
          <header
-            className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ${
+            className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-40 transition-all duration-300 ${
                scrolled
                   ? 'backdrop-blur-xl bg-white/20 border-white/20 shadow-lg'
                   : 'backdrop-blur-lg bg-white/10'
@@ -95,7 +95,7 @@ export default function HeroPage() {
 
          {/* Mobile Sidebar */}
          <div
-            className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
+            className={`fixed inset-0 z-50 lg:hidden transition-opacity duration-300 ${
                sidebarOpen
                   ? 'opacity-100 pointer-events-auto'
                   : 'opacity-0 pointer-events-none'

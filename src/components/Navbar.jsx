@@ -107,15 +107,9 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
             <div className="relative h-full flex flex-col p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 customScrollbar">
                {/* Logo/Brand */}
                <div className="mb-8 mt-4">
-                  <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
-                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                        <Sparkles size={20} className="text-white" />
-                     </div>
+                  <div className="flex items-center gap-3 px-4 py-3 ">
                      <div>
-                        <h1 className="text-xl font-bold text-white">
-                           All In One Place
-                        </h1>
-                        <p className="text-xs text-gray-400">Creative Tools</p>
+                        <p className="text-4xl font-bold text-white">Menu</p>
                      </div>
                   </div>
                </div>
@@ -131,7 +125,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
                            key={item.path}
                            to={item.path}
                            className={`
-                              group relative flex items-center gap-4 px-4 py-4
+                              group relative flex items-center gap-4 px-4 py-3
                               rounded-2xl font-medium text-sm
                               transition-all duration-300 ease-out
                               overflow-hidden
@@ -180,7 +174,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
                </nav>
 
                {/* Footer */}
-               <div className="mt-8 pt-6 border-t border-white/10">
+               <div className="mt-8 pt-6 border-t border-white/20">
                   <div className="px-4 py-3 rounded-2xl bg-white/5 border border-white/10">
                      <p className="text-xs text-gray-400 mb-1">Made with ❤️</p>
                      <p className="text-xs text-white/70">Version 1.0.0</p>
