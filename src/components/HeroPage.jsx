@@ -77,12 +77,36 @@ const tools = [
 export default function HeroPage() {
    const [sidebarOpen, setSidebarOpen] = useState(false);
    const [scrolled, setScrolled] = useState(false);
+   const [showNavbar, setShowNavbar] = useState(true);
+   const [lastScrollY, setLastScrollY] = useState(0);
    const sectionRef = useRef(null);
 
    useEffect(() => {
       const handleScroll = () => setScrolled(window.scrollY > 20);
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
+   }, []);
+
+   useEffect(() => {
+      let lastY = 0;
+      const controlNavbar = () => {
+         const currentY = window.scrollY;
+
+         if (currentY > 200) {
+            if (currentY > lastY) {
+               setShowNavbar(false); // scrolling down
+            } else {
+               setShowNavbar(true); // scrolling up
+            }
+         } else {
+            setShowNavbar(true); // near top
+         }
+
+         lastY = currentY;
+      };
+
+      window.addEventListener('scroll', controlNavbar);
+      return () => window.removeEventListener('scroll', controlNavbar);
    }, []);
 
    const handleScroll = () => {
@@ -93,21 +117,25 @@ export default function HeroPage() {
    };
 
    return (
-      <div className="max-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
          {/* Decorative blurred gradient blobs */}
          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-[150px]" />
          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-pink-500/30 rounded-full blur-[150px]" />
 
          {/* Navbar */}
          <header
-            className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-40 transition-all duration-300 ${
-               scrolled
-                  ? 'backdrop-blur-xl bg-white/20 border-white/20 shadow-lg'
-                  : 'backdrop-blur-lg bg-white/10'
-            } border border-white/10 px-8 py-3 rounded-full flex items-center justify-between w-[90%] md:w-[70%] max-w-5xl`}>
+            className={`fixed top-2 left-1/2 transform -translate-x-1/2 z-40 
+      transition-all duration-500 ease-in-out
+      ${showNavbar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-20'}
+      ${
+         scrolled
+            ? 'backdrop-blur-xl bg-white/20 border-white/20 shadow-lg'
+            : 'backdrop-blur-lg bg-white/10'
+      } 
+      border border-white/10 px-8 py-3 rounded-full flex items-center justify-between w-[90%] md:w-[70%] max-w-5xl`}>
             {/* Logo */}
             <div className="flex items-center space-x-2">
-               <span className="text-lg font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+               <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
                   TapClick
                </span>
             </div>
