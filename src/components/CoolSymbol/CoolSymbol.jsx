@@ -602,7 +602,7 @@ const SymbolButton = memo(({ symbol, onCopy }) => (
                bg-white/5 hover:bg-white/20 active:bg-white/30 rounded-xl 
                transition-all duration-300 ease-out hover:scale-110 hover:rotate-3 
                active:scale-95 shadow-md hover:shadow-lg hover:shadow-yellow-500/20 
-               border border-white/10 relative overflow-hidden group p-3">
+               border border-white/10 relative overflow-hidden group">
       <span className="transition-transform duration-300 group-hover:scale-110">
          {symbol}
       </span>
@@ -626,6 +626,11 @@ export default function CoolSymbol() {
       checkMobile();
       window.addEventListener('resize', checkMobile);
       return () => window.removeEventListener('resize', checkMobile);
+   }, []);
+
+   useEffect(() => {
+      const stored = JSON.parse(localStorage.getItem('recentSymbol') || '[]');
+      setRecentEmojis(stored);
    }, []);
 
    const showNotification = useCallback(
@@ -726,7 +731,7 @@ export default function CoolSymbol() {
                <h2 className="text-xl font-semibold mb-4 text-white/90">
                   Recently Used
                </h2>
-               <div className="flex flex-wrap justify-center gap-3">
+               <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-10 gap-1.5">
                   {recentEmojis.map((emoji, i) => (
                      <SymbolButton key={i} symbol={emoji} onCopy={handleCopy} />
                   ))}
