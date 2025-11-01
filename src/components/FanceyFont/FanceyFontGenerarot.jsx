@@ -69,9 +69,10 @@ const FancyFontGenerator = () => {
          { name: 'Monospace', icon: '𝙼', mapKey: 'monospace' },
          { name: 'Sans Serif', icon: '𝖲', mapKey: 'sans' },
          { name: 'Fancy Fraktur', icon: '𝔊', mapKey: 'fraktur' },
+         { name: 'fullwidth', icon: 'ｈ', mapKey: 'fullwidth' },
          {
             name: 'Strikethrough',
-            icon: 'S̶',
+            icon: '-S-',
             transform: (text) =>
                text
                   ?.split('')

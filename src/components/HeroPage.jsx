@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
    FaSmile,
    FaUserAlt,
@@ -10,6 +10,7 @@ import {
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { IoIosShareAlt } from 'react-icons/io';
+import { BiFont } from 'react-icons/bi';
 
 const tools = [
    {
@@ -45,19 +46,34 @@ const tools = [
       title: 'HashTag',
       desc: 'Create personalized and engaging bio content.',
       link: '/hashtaggenerator',
-      gradient: 'from-amber-500 via-orange-500 to-red-500',
+      gradient: 'from-amber-200 via-orange-500 to-blue-300',
+   },
+   {
+      icon: <BiFont size={32} />,
+      title: 'Word Counter',
+      desc: 'Create personalized and engaging bio content.',
+      link: '/wordCounter',
+      gradient: 'from-green-500 via-yellow-500 to-cyan-500',
    },
 ];
 
 export default function HeroPage() {
    const [sidebarOpen, setSidebarOpen] = useState(false);
    const [scrolled, setScrolled] = useState(false);
+   const sectionRef = useRef(null);
 
    useEffect(() => {
       const handleScroll = () => setScrolled(window.scrollY > 20);
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
    }, []);
+
+   const handleScroll = () => {
+      sectionRef.current?.scrollIntoView({
+         behavior: 'smooth', // smooth scrolling animation
+         block: 'start', // align section at top
+      });
+   };
 
    return (
       <div className="max-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
@@ -80,7 +96,9 @@ export default function HeroPage() {
             </div>
 
             {/* Get Started Button */}
-            <button className="px-5 py-2 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-full text-sm font-semibold hover:scale-105 hover:shadow-md hover:shadow-pink-500/30 transition-all duration-300">
+            <button
+               className="px-5 py-2 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-full text-sm font-semibold hover:scale-105 hover:shadow-md hover:shadow-pink-500/30 transition-all duration-300"
+               onClick={handleScroll}>
                Get Started
             </button>
 
@@ -146,7 +164,9 @@ export default function HeroPage() {
                your social media and digital presence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-               <button className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-pink-500/40 transition-all duration-300 hover:scale-105 active:scale-95 w-full sm:w-auto">
+               <button
+                  className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-pink-500/40 transition-all duration-300 hover:scale-105 active:scale-95 w-full sm:w-auto"
+                  onClick={handleScroll}>
                   Start Creating
                </button>
                <button className="px-8 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl font-semibold text-lg hover:bg-white/20 transition-all duration-300 w-full sm:w-auto">
@@ -156,7 +176,10 @@ export default function HeroPage() {
          </section>
 
          {/* Tools Section */}
-         <section id="tools" className="py-24 px-6 relative z-10">
+         <section
+            id="tools"
+            className="py-24 px-6 relative z-10"
+            ref={sectionRef}>
             <div className="max-w-7xl mx-auto text-center">
                <h2 className="text-4xl md:text-5xl font-bold mb-4">
                   Our{' '}

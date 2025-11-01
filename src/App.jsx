@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import CoolSymbol from './components/CoolSymbol/CoolSymbol';
 import HashtagGenerator from './components/Hashtag/HashtagGenerator';
 import BioGenerator from './components/BioGenerator/BioGenerator';
+import WordCounter from './components/WordCounter/WordCounter';
 
 function App() {
    return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/symbol" element={<CoolSymbol />} />
             <Route path="/hashtaggenerator" element={<HashtagGenerator />} />
             <Route path="/bio" element={<BioGenerator />} />
+            <Route path="/wordcounter" element={<WordCounter />} />
          </Routes>
       </>
    );
