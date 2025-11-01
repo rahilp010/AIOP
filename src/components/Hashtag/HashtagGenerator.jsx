@@ -225,7 +225,7 @@ Return only hashtags separated by spaces, no explanations.`,
                   </button>
 
                   {/* Results Section - Responsive height and padding */}
-                  <div className="relative max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-y-auto border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-md">
+                  <div className="relative max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-y-auto rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-m">
                      {hashtags.length > 0 && (
                         <button
                            onClick={handleCopy}

@@ -4,6 +4,7 @@ import Navbar from '../Navbar';
 import { FaBars } from 'react-icons/fa';
 
 import { Copy } from 'lucide-react';
+import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 
 export default function Paraphrase() {
    const [description, setDescription] = useState('');
@@ -277,14 +278,19 @@ Return only the 3 paraphrased versions, clearly separated by:
                            </div>
                         ))
                      ) : (
-                        <div className="h-24 sm:h-32 flex items-center justify-center border border-white/20 bg-white/5 rounded-xl sm:rounded-2xl backdrop-blur-md">
-                           <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-2">
-                              <PiSparkleLight
-                                 size={20}
-                                 className="hidden sm:block"
-                              />
-                              <PiSparkleLight size={16} className="sm:hidden" />
-                              No Paraphrase yet.
+                        <div className="col-span-full flex flex-col items-center justify-center py-16 text-center text-white/70 animate-fade-in">
+                           <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-indigo-400 to-pink-400 opacity-80 flex items-center justify-center shadow-lg shadow-indigo-500/30 animate-pulse">
+                              <GiPerspectiveDiceSixFacesRandom className="text-3xl" />
+                           </div>
+                           <h3 className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                              No Paraphrase yet
+                           </h3>
+                           <p className="text-gray-400 max-w-sm">
+                              Tap{' '}
+                              <span className="text-pink-400 font-medium">
+                                 Generate Paraphrase
+                              </span>{' '}
+                              to create Paraphrase instantly ✨
                            </p>
                         </div>
                      )}

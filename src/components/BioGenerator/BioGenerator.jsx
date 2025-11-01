@@ -245,6 +245,8 @@ Separate bios with ---
                         </div>
                      )}
                   </button>
+
+                  
                   {/* 🧾 Result Section */}
                   <div className="flex flex-col gap-3">
                      {isLoading ? (

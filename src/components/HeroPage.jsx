@@ -11,6 +11,9 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { IoIosShareAlt } from 'react-icons/io';
 import { BiFont } from 'react-icons/bi';
+import { SiNamecheap } from 'react-icons/si';
+import { TfiParagraph } from 'react-icons/tfi';
+import { HiAtSymbol } from 'react-icons/hi2';
 
 const tools = [
    {
@@ -28,7 +31,7 @@ const tools = [
       gradient: 'from-purple-500 via-pink-500 to-rose-400',
    },
    {
-      icon: <FaHashtag size={32} />,
+      icon: <HiAtSymbol size={32} />,
       title: 'Symbols',
       desc: 'Generate relevant hashtags and captions for your posts.',
       link: '/symbol',
@@ -56,14 +59,14 @@ const tools = [
       gradient: 'from-green-500 via-yellow-500 to-cyan-500',
    },
    {
-      icon: <BiFont size={32} />,
+      icon: <TfiParagraph size={32} />,
       title: 'Paraphrase',
       desc: 'Create personalized and engaging bio content.',
       link: '/paraphrase',
       gradient: 'from-red-500 via-indigo-500 to-pink-500',
    },
    {
-      icon: <BiFont size={32} />,
+      icon: <SiNamecheap size={32} />,
       title: 'Username Generator',
       desc: 'Create personalized and engaging bio content.',
       link: '/username',
