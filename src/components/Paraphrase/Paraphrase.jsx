@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FaCopy, FaTrash, FaDownload, FaBars, FaRedo } from 'react-icons/fa';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import {
@@ -47,14 +47,13 @@ export default function AIWriter() {
    const [sidebarExpanded, setSidebarExpanded] = useState(false);
    const [sidebarOpen, setSidebarOpen] = useState(false);
    const [searchQuery, setSearchQuery] = useState('');
+   const generateButtonRef = useRef(null);
 
    const [toast, setToast] = useState({
       message: '',
       type: '',
       visible: false,
    });
-
-   const [lastPayload, setLastPayload] = useState(null);
 
    const tools = [
       {
@@ -151,6 +150,15 @@ export default function AIWriter() {
       setTimeout(() => setToast((t) => ({ ...t, visible: false })), duration);
    }
 
+   const handleScroll = () => {
+      if (generateButtonRef.current) {
+         generateButtonRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+         });
+      }
+   };
+
    const canGenerate = useMemo(
       () => prompt.trim().length > 0 && !isGenerating,
       [prompt, isGenerating]
@@ -209,41 +217,60 @@ export default function AIWriter() {
 
    const toolPrompts = {
       Article: (prompt, tone, language, length) =>
-         `Write a detailed article about "${prompt}" in ${language} language, tone: ${tone}. Target length: ${length} words.`,
+         `You are an expert content writer. Write a detailed, well-structured article in ${language} about "${prompt}".
+The article should reflect a ${tone} tone, include a strong introduction, organized sections, and a conclusion.
+Ensure factual accuracy, clarity, and engagement. Target length: around ${length} words.`,
 
       Email: (prompt, tone, language) =>
-         `Compose a professional email regarding "${prompt}" in ${language} with a ${tone} tone.`,
+         `You are a professional email copywriter. Compose a clear, concise, and well-formatted email in ${language} about "${prompt}".
+Use a ${tone} tone appropriate for the context. Include a subject line and maintain natural, polite phrasing.`,
 
       Essay: (prompt, tone, language, length) =>
-         `Write an essay about "${prompt}" in ${language}, tone: ${tone}. It should be around ${length} words.`,
+         `You are an academic writer. Write an essay in ${language} about "${prompt}".
+Maintain a ${tone} tone with logical flow, introduction, body paragraphs, and a conclusion.
+Support arguments with relevant reasoning or examples. Length: around ${length} words.`,
 
       Keywords: (prompt, language) =>
-         `Generate a list of SEO keywords related to "${prompt}" in ${language}.`,
+         `You are an SEO expert. Generate a list of highly relevant, high-impact SEO keywords for "${prompt}" in ${language}.
+Include both short-tail and long-tail keywords. Present them as a bulleted list, one per line, without numbering.`,
 
       Title: (prompt, language) =>
-         `Generate 10 catchy titles for "${prompt}" in ${language}. Each title should be unique and creative. & show in bullet points and each title surrounded by double quotes`,
+         `You are a creative copywriter. Generate 10 catchy, attention-grabbing titles in ${language} for the topic "${prompt}".
+Each title should be unique, engaging, and relevant to the theme.
+Show the titles as bullet points, each surrounded by double quotes.`,
 
       Name: (prompt, language) =>
-         `Suggest creative brand or product names for "${prompt}" in ${language}.`,
+         `You are a branding specialist. Suggest a list of unique, memorable, and creative brand or product names related to "${prompt}" in ${language}.
+Make sure each name is short, easy to pronounce, and conveys the right emotional or conceptual meaning.
+Present each name as a bullet point, each surrounded by double quotes and remove * from the list.`,
 
       Paragraph: (prompt, tone, language) =>
-         `Write a descriptive paragraph about "${prompt}" in ${language}, with a ${tone} tone.`,
+         `You are a skilled writer. Write a descriptive and coherent paragraph in ${language} about "${prompt}".
+Maintain a ${tone} tone throughout. The paragraph should be rich in detail, natural in flow, and contextually accurate.`,
 
       Prompt: (prompt) =>
-         `Generate an optimized AI prompt for "${prompt}" suitable for use in Gemini or ChatGPT.`,
+         `You are an expert in AI prompt engineering. Create an optimized, detailed prompt for the topic "${prompt}".
+The prompt should be structured to produce high-quality, context-aware results in models like Gemini or ChatGPT.
+Include instructions for tone, length, and context if relevant. Output only the final optimized prompt.`,
 
       Translation: (prompt, language) =>
-         `Translate the following text to ${language}:"${prompt}" Only output the translated text, nothing else.`,
+         `You are a professional translator with expertise in preserving tone, context, and cultural nuances.
+Translate the following text accurately into ${language}.
+- Maintain the same style, tone, and intent as the original.
+- Adapt idioms or expressions naturally for native speakers.
+- Do not include explanations, quotes, or formatting — output only the translated text.
+Text: "${prompt}"`,
    };
 
    async function generate() {
       if (!canGenerate) return;
       setIsGenerating(true);
       setResult('');
-      showNotification('Generating content…', 'success', 1500);
+      showNotification('✨✨Generating content✨✨', 'success', 1500);
 
       try {
          // ✅ Combine prompt with user tone/language/length preferences
+         handleScroll();
          const buildPrompt = toolPrompts[activeTool];
          let fullPrompt;
          if (activeTool === 'Article' || activeTool === 'Essay') {
@@ -278,7 +305,7 @@ export default function AIWriter() {
             name: queryName || undefined,
          });
 
-         showNotification('✅ Content generated');
+         showNotification('✨✨Content generated✨✨');
       } catch (err) {
          console.error(err);
          showNotification('❌ Failed to generate content', 'error');
@@ -300,7 +327,7 @@ export default function AIWriter() {
       navigator.clipboard.writeText(result);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      showNotification('Copied to clipboard');
+      showNotification('☑️ Copied to clipboard');
    }
 
    function handleClear() {
@@ -321,7 +348,7 @@ export default function AIWriter() {
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
-      showNotification('Downloaded successfully');
+      showNotification('✅ Downloaded successfully');
    }
 
    function handleUpload(e) {
@@ -330,7 +357,7 @@ export default function AIWriter() {
          const reader = new FileReader();
          reader.onload = (ev) => setPrompt(ev.target.result);
          reader.readAsText(file);
-         showNotification('File uploaded');
+         showNotification('✅ File uploaded');
       }
    }
 
@@ -723,12 +750,12 @@ export default function AIWriter() {
                      value={prompt}
                      onChange={(e) => setPrompt(e.target.value)}
                      placeholder={`✨ Describe what you want to create with ${activeTool}...\n\nExample: "Write an article about sustainable living with tips for beginners"`}
-                     className="w-full h-48 p-4 bg-black/50 border border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm sm:text-base resize-none customScrollbar"
-                  />
+                     className="w-full h-48 p-4 bg-black/50 border border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm sm:text-base resize-none customScrollbar"></textarea>
 
                   <div className="mt-6 flex flex-wrap items-center gap-4 relative z-10">
                      {/* 🪄 Generate Button */}
                      <motion.button
+                        ref={generateButtonRef}
                         onClick={generate}
                         disabled={!canGenerate}
                         whileHover={{ scale: 1.05 }}
