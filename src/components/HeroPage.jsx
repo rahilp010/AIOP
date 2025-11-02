@@ -9,11 +9,10 @@ import {
 } from 'react-icons/fa';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { IoIosShareAlt } from 'react-icons/io';
 import { BiFont } from 'react-icons/bi';
 import { SiNamecheap } from 'react-icons/si';
-import { TfiParagraph } from 'react-icons/tfi';
 import { HiAtSymbol } from 'react-icons/hi2';
+import { IoSparklesOutline } from 'react-icons/io5';
 
 const tools = [
    {
@@ -59,10 +58,10 @@ const tools = [
       gradient: 'from-green-500 via-yellow-500 to-cyan-500',
    },
    {
-      icon: <TfiParagraph size={32} />,
-      title: 'Paraphrase',
+      icon: <IoSparklesOutline size={32} />,
+      title: 'AI Writer',
       desc: 'Create personalized and engaging bio content.',
-      link: '/paraphrase',
+      link: '/aiwriter',
       gradient: 'from-red-500 via-indigo-500 to-pink-500',
    },
    {
@@ -78,7 +77,6 @@ export default function HeroPage() {
    const [sidebarOpen, setSidebarOpen] = useState(false);
    const [scrolled, setScrolled] = useState(false);
    const [showNavbar, setShowNavbar] = useState(true);
-   const [lastScrollY, setLastScrollY] = useState(0);
    const sectionRef = useRef(null);
 
    useEffect(() => {
@@ -117,7 +115,7 @@ export default function HeroPage() {
    };
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
+      <div className="max-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
          {/* Decorative blurred gradient blobs */}
          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-[150px]" />
          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-pink-500/30 rounded-full blur-[150px]" />
@@ -226,7 +224,7 @@ export default function HeroPage() {
             className="py-24 px-6 relative z-10"
             ref={sectionRef}>
             <div className="max-w-7xl mx-auto text-center">
-               <h2 className="text-4xl md:text-5xl font-bold mb-4">
+               <h2 className="text-4xl md:text-5xl font-bold mb-4 ">
                   Our{' '}
                   <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
                      Trending Tools

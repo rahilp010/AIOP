@@ -67,8 +67,8 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
          borderColor: 'border-red-400/30',
       },
       {
-         title: 'Paraphrase',
-         path: '/paraphrase',
+         title: 'AI Writer',
+         path: '/aiwriter',
          icon: Sparkle,
          gradient: 'from-red-500 via-yellow-500 to-blue-500',
          borderColor: 'border-red-400/30',

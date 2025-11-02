@@ -34,7 +34,7 @@ function App() {
             <Route path="/hashtaggenerator" element={<HashtagGenerator />} />
             <Route path="/bio" element={<BioGenerator />} />
             <Route path="/wordcounter" element={<WordCounter />} />
-            <Route path="/paraphrase" element={<Paraphrase />} />
+            <Route path="/aiwriter" element={<Paraphrase />} />
             <Route path="/username" element={<UsernameGenerator />} />
          </Routes>
       </>
