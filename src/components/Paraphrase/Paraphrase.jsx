@@ -233,7 +233,7 @@ export default function AIWriter() {
          `Generate an optimized AI prompt for "${prompt}" suitable for use in Gemini or ChatGPT.`,
 
       Translation: (prompt, language) =>
-         `Translate the following text into ${language}:\n\n${prompt}`,
+         `Translate the following text to ${language}:"${prompt}" Only output the translated text, nothing else.`,
    };
 
    async function generate() {
@@ -250,6 +250,10 @@ export default function AIWriter() {
             fullPrompt = buildPrompt
                ? buildPrompt(prompt, tone, language, length)
                : `${prompt}\nTone: ${tone}\nLanguage: ${language}\nLength: ${length} words.`;
+         } else if (activeTool === 'Translation') {
+            fullPrompt = buildPrompt
+               ? buildPrompt(prompt, language)
+               : `${prompt}\nLanguage: ${language}`;
          } else {
             fullPrompt = buildPrompt
                ? buildPrompt(prompt, tone, language)
@@ -541,39 +545,44 @@ export default function AIWriter() {
                            Generation Settings
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                           <div className="relative w-full">
-                              <select
-                                 value={tone}
-                                 onChange={(e) => setTone(e.target.value)}
-                                 className="
+                           {activeTool !== 'Prompt' &&
+                              activeTool !== 'Translation' &&
+                              activeTool !== 'Name' &&
+                              activeTool !== 'Keywords' &&
+                              activeTool !== 'Title' && (
+                                 <div className="relative w-full">
+                                    <select
+                                       value={tone}
+                                       onChange={(e) => setTone(e.target.value)}
+                                       className="
          w-full px-4 py-3 
          bg-black/40 border border-white/10 text-white rounded-xl
          focus:ring-2 focus:ring-indigo-400 focus:outline-none 
          appearance-none cursor-pointer
          transition-all duration-300
       ">
-                                 <option>Neutral</option>
-                                 <option>Professional</option>
-                                 <option>Casual</option>
-                                 <option>Friendly</option>
-                                 <option>Formal</option>
-                              </select>
+                                       <option>Neutral</option>
+                                       <option>Professional</option>
+                                       <option>Casual</option>
+                                       <option>Friendly</option>
+                                       <option>Formal</option>
+                                    </select>
 
-                              {/* Custom dropdown icon */}
-                              <svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 20 20"
-                                 fill="currentColor"
-                                 className="w-5 h-5 text-white/60 absolute right-4 top-7 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
-                                 <path
-                                    fillRule="evenodd"
-                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
-                                    clipRule="evenodd"
-                                 />
-                              </svg>
+                                    {/* Custom dropdown icon */}
+                                    <svg
+                                       xmlns="http://www.w3.org/2000/svg"
+                                       viewBox="0 0 20 20"
+                                       fill="currentColor"
+                                       className="w-5 h-5 text-white/60 absolute right-4 top-7 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
+                                       <path
+                                          fillRule="evenodd"
+                                          d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                                          clipRule="evenodd"
+                                       />
+                                    </svg>
 
-                              <style>
-                                 {`
+                                    <style>
+                                       {`
          select option {
             background-color: rgba(10, 10, 15, 0.95);
             color: white;
@@ -583,42 +592,47 @@ export default function AIWriter() {
             background-color: rgba(255, 255, 255, 0.1);
          }
       `}
-                              </style>
-                           </div>
-
-                           <div className="relative w-full">
-                              <select
-                                 value={language}
-                                 onChange={(e) => setLanguage(e.target.value)}
-                                 className="
+                                    </style>
+                                 </div>
+                              )}
+                           {activeTool !== 'Prompt' && (
+                              <div className="relative w-full">
+                                 <select
+                                    value={language}
+                                    onChange={(e) =>
+                                       setLanguage(e.target.value)
+                                    }
+                                    className="
          w-full px-4 py-3 
          bg-black/40 border border-white/10 text-white rounded-xl
          focus:ring-2 focus:ring-indigo-400 focus:outline-none 
          appearance-none cursor-pointer
          transition-all duration-300
       ">
-                                 <option>English</option>
-                                 <option>Spanish</option>
-                                 <option>French</option>
-                                 <option>German</option>
-                                 <option>Italian</option>
-                              </select>
+                                    <option>English</option>
+                                    <option>Gujarati</option>
+                                    <option>Hindi</option>
+                                    <option>Spanish</option>
+                                    <option>French</option>
+                                    <option>German</option>
+                                    <option>Italian</option>
+                                 </select>
 
-                              {/* Custom dropdown icon */}
-                              <svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 20 20"
-                                 fill="currentColor"
-                                 className="w-5 h-5 text-white/60 absolute right-4 top-7 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
-                                 <path
-                                    fillRule="evenodd"
-                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
-                                    clipRule="evenodd"
-                                 />
-                              </svg>
+                                 {/* Custom dropdown icon */}
+                                 <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    className="w-5 h-5 text-white/60 absolute right-4 top-7 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
+                                    <path
+                                       fillRule="evenodd"
+                                       d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                                       clipRule="evenodd"
+                                    />
+                                 </svg>
 
-                              <style>
-                                 {`
+                                 <style>
+                                    {`
          select option {
             background-color: rgba(10, 10, 15, 0.95);
             color: white;
@@ -628,8 +642,9 @@ export default function AIWriter() {
             background-color: rgba(255, 255, 255, 0.1);
          }
       `}
-                              </style>
-                           </div>
+                                 </style>
+                              </div>
+                           )}
                            {(activeTool === 'Article' ||
                               activeTool === 'Essay') && (
                               <div className="flex items-center">

@@ -78,6 +78,7 @@ export default function HeroPage() {
    const [scrolled, setScrolled] = useState(false);
    const [showNavbar, setShowNavbar] = useState(true);
    const sectionRef = useRef(null);
+   const toolsSectionRef = useRef(null);
 
    useEffect(() => {
       const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -86,36 +87,46 @@ export default function HeroPage() {
    }, []);
 
    useEffect(() => {
-      let lastY = 0;
-      const controlNavbar = () => {
-         const currentY = window.scrollY;
+      const scrollContainer = sectionRef.current;
+      if (!scrollContainer) return;
 
-         if (currentY > 200) {
-            if (currentY > lastY) {
-               setShowNavbar(false); // scrolling down
-            } else {
-               setShowNavbar(true); // scrolling up
-            }
+      let lastY = 0;
+
+      const controlNavbar = () => {
+         const currentY = scrollContainer.scrollTop;
+
+         // Always show navbar near top (hero area)
+         if (currentY < 150) {
+            setShowNavbar(true);
          } else {
-            setShowNavbar(true); // near top
+            // Hide on scroll down, show on scroll up
+            if (currentY > lastY + 10) setShowNavbar(false);
+            else if (currentY < lastY - 10) setShowNavbar(true);
          }
 
          lastY = currentY;
       };
 
-      window.addEventListener('scroll', controlNavbar);
-      return () => window.removeEventListener('scroll', controlNavbar);
+      scrollContainer.addEventListener('scroll', controlNavbar, {
+         passive: true,
+      });
+
+      return () => scrollContainer.removeEventListener('scroll', controlNavbar);
    }, []);
 
    const handleScroll = () => {
-      sectionRef.current?.scrollIntoView({
-         behavior: 'smooth', // smooth scrolling animation
-         block: 'start', // align section at top
-      });
+      if (toolsSectionRef.current) {
+         toolsSectionRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+         });
+      }
    };
 
    return (
-      <div className="max-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
+      <div
+         ref={sectionRef}
+         className="max-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-auto customScrollbar">
          {/* Decorative blurred gradient blobs */}
          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-[150px]" />
          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-pink-500/30 rounded-full blur-[150px]" />
@@ -123,14 +134,14 @@ export default function HeroPage() {
          {/* Navbar */}
          <header
             className={`fixed top-2 left-1/2 transform -translate-x-1/2 z-40 
-      transition-all duration-500 ease-in-out
-      ${showNavbar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-20'}
-      ${
-         scrolled
-            ? 'backdrop-blur-xl bg-white/20 border-white/20 shadow-lg'
-            : 'backdrop-blur-lg bg-white/10'
-      } 
-      border border-white/10 px-8 py-3 rounded-full flex items-center justify-between w-[90%] md:w-[70%] max-w-5xl`}>
+    transition-all duration-500 ease-in-out
+    ${showNavbar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-20'}
+    ${
+       scrolled
+          ? 'backdrop-blur-xl bg-white/20 border-white/20 shadow-lg'
+          : 'backdrop-blur-lg bg-white/10'
+    }
+    border border-white/10 px-8 py-3 rounded-full flex items-center justify-between w-[90%] md:w-[70%] max-w-5xl`}>
             {/* Logo */}
             <div className="flex items-center space-x-2">
                <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
@@ -221,8 +232,8 @@ export default function HeroPage() {
          {/* Tools Section */}
          <section
             id="tools"
-            className="py-24 px-6 relative z-10"
-            ref={sectionRef}>
+            className="py-20 px-6 relative z-10"
+            ref={toolsSectionRef}>
             <div className="max-w-7xl mx-auto text-center">
                <h2 className="text-4xl md:text-5xl font-bold mb-4 ">
                   Our{' '}
