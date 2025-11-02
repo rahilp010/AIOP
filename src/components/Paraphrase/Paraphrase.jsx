@@ -93,6 +93,21 @@ export default function AIWriter() {
       },
    ];
 
+   const placeholder = {
+      Article: 'Write a full article about "Your Topic".',
+      Email: 'Write a professional email to recipient about "Your Topic".',
+      Essay: 'Write an essay about "Your Topic".',
+      Keywords: 'Generate 15 relevant SEO keywords related to "Your Topic".',
+      Name: 'Generate 10 creative names for a product brand or company.',
+      Paragraph:
+         'Write a descriptive and coherent paragraph about "Your Topic".',
+      Prompt:
+         'You are an expert in AI prompt engineering. Create an optimized, detailed prompt for the topic "Your Topic".',
+      Title: 'Generate 10 catchy, attention-grabbing titles for the topic "Your Topic".',
+      Translation:
+         'Translate the following text accurately into "Your Language".',
+   };
+
    const templates = [
       {
          id: 'article_intro',
@@ -414,11 +429,11 @@ export default function AIWriter() {
                                     setActiveTool(tool.name);
                                     setSidebarOpen(false);
                                  }}
-                                 className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left transition-all duration-200 
+                                 className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left
               ${
                  activeTool === tool.name
                     ? 'bg-gradient-to-r from-indigo-600/30 to-pink-500/20 border border-indigo-500/40 text-white shadow-md shadow-indigo-500/20'
-                    : 'hover:bg-white/10 text-gray-300'
+                    : 'hover:bg-white/10'
               }`}>
                                  <span className="text-xl">{tool.icon}</span>
                                  {sidebarExpanded && (
@@ -519,8 +534,8 @@ export default function AIWriter() {
                               <div className="flex items-center">
                                  <label
                                     htmlFor="length"
-                                    className="w-40 text-sm">
-                                    Total words:
+                                    className="w-32 text-sm">
+                                    Total words :
                                  </label>
                                  <input
                                     id="length"
@@ -531,7 +546,7 @@ export default function AIWriter() {
                                     onChange={(e) =>
                                        setLength(Number(e.target.value))
                                     }
-                                    className="w-40 px-3 py-3 bg-black/50 border border-white/10 text-white rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none appearance-none cursor-pointer transition-all duration-300"
+                                    className="w-full px-3 py-3 bg-black/50 border border-white/10 text-white rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none appearance-none cursor-pointer transition-all duration-300"
                                  />
                               </div>
                            )}
@@ -557,7 +572,7 @@ export default function AIWriter() {
                   <textarea
                      value={prompt}
                      onChange={(e) => setPrompt(e.target.value)}
-                     placeholder={`✨ Describe what you want to create with ${activeTool}...\n\nExample: "Write an article about sustainable living with tips for beginners"`}
+                     placeholder={`✨ Describe what you want to create with ${activeTool}...\n\nExample: ${placeholder[activeTool]}`}
                      className="w-full h-48 p-4 bg-black/50 border border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm sm:text-base resize-none customScrollbar"></textarea>
 
                   <div className="mt-6 flex flex-wrap items-center gap-4 relative z-10">
