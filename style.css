@@ -97,3 +97,51 @@ html {
 .rotate-y-180 {
    transform: rotateY(180deg);
 }
+
+select option {
+   background-color: rgba(10, 10, 15, 0.95);
+   color: white;
+   padding: 10px;
+}
+select option:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-effect {
+   background: rgba(255, 255, 255, 0.03);
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   backdrop-filter: blur(12px);
+}
+
+.shimmer {
+   background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.02) 100%
+   );
+   background-size: 200% 100%;
+   animation: shimmer 1.6s linear infinite;
+}
+
+@keyframes shimmer {
+   0% {
+      background-position: -200% 0;
+   }
+   100% {
+      background-position: 200% 0;
+   }
+}
+
+.tool-active {
+   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.sidebar-collapsed {
+   width: 80px;
+}
+
+.sidebar-expanded {
+   width: 280px;
+}

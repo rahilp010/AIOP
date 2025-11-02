@@ -19,16 +19,7 @@ import { Settings } from 'lucide-react';
 import { PiSparkleLight } from 'react-icons/pi';
 import { motion } from 'framer-motion';
 import Navbar from '../Navbar';
-
-/**
- * AIWriter (Gemini-powered) - Enhanced UI
- * - Collapsible sidebar with icon-only view
- * - Improved readability and spacing
- * - Better visual hierarchy
- */
-
-// Mock API key for demonstration
-const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE';
+import { callGeminiApi, toolPrompts } from './AI';
 
 export default function AIWriter() {
    const [activeTool, setActiveTool] = useState('Article');
@@ -36,7 +27,6 @@ export default function AIWriter() {
    const [tone, setTone] = useState('Neutral');
    const [language, setLanguage] = useState('English');
    const [length, setLength] = useState(150);
-   const [temperature, setTemperature] = useState(0.7);
    const [result, setResult] = useState('');
    const [isGenerating, setIsGenerating] = useState(false);
    const [history, setHistory] = useState([]);
@@ -183,85 +173,6 @@ export default function AIWriter() {
       setHistory(newHistory);
    }
 
-   // Real Gemini API call
-   async function callGeminiApi(promptText) {
-      try {
-         const res = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-            {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({
-                  contents: [{ role: 'user', parts: [{ text: promptText }] }],
-               }),
-            }
-         );
-
-         const data = await res.json();
-         console.log('Gemini raw response:', data); // 🧠 log this
-
-         if (data.error) {
-            throw new Error(data.error.message);
-         }
-
-         const text =
-            data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-            '⚠️ No response received from Gemini API.';
-
-         return text;
-      } catch (err) {
-         console.error('Gemini API Error:', err);
-         return '⚠️ Error while fetching response: ' + err.message;
-      }
-   }
-
-   const toolPrompts = {
-      Article: (prompt, tone, language, length) =>
-         `You are an expert content writer. Write a detailed, well-structured article in ${language} about "${prompt}".
-The article should reflect a ${tone} tone, include a strong introduction, organized sections, and a conclusion.
-Ensure factual accuracy, clarity, and engagement. Target length: around ${length} words.`,
-
-      Email: (prompt, tone, language) =>
-         `You are a professional email copywriter. Compose a clear, concise, and well-formatted email in ${language} about "${prompt}".
-Use a ${tone} tone appropriate for the context. Include a subject line and maintain natural, polite phrasing.`,
-
-      Essay: (prompt, tone, language, length) =>
-         `You are an academic writer. Write an essay in ${language} about "${prompt}".
-Maintain a ${tone} tone with logical flow, introduction, body paragraphs, and a conclusion.
-Support arguments with relevant reasoning or examples. Length: around ${length} words.`,
-
-      Keywords: (prompt, language) =>
-         `You are an SEO expert. Generate a list of highly relevant, high-impact SEO keywords for "${prompt}" in ${language}.
-Include both short-tail and long-tail keywords. Present them as a bulleted list, one per line, without numbering.`,
-
-      Title: (prompt, language) =>
-         `You are a creative copywriter. Generate 10 catchy, attention-grabbing titles in ${language} for the topic "${prompt}".
-Each title should be unique, engaging, and relevant to the theme.
-Show the titles as bullet points, each surrounded by double quotes.`,
-
-      Name: (prompt, language) =>
-         `You are a branding specialist. Suggest a list of unique, memorable, and creative brand or product names related to "${prompt}" in ${language}.
-Make sure each name is short, easy to pronounce, and conveys the right emotional or conceptual meaning.
-Present each name as a bullet point, each surrounded by double quotes and remove * from the list.`,
-
-      Paragraph: (prompt, tone, language) =>
-         `You are a skilled writer. Write a descriptive and coherent paragraph in ${language} about "${prompt}".
-Maintain a ${tone} tone throughout. The paragraph should be rich in detail, natural in flow, and contextually accurate.`,
-
-      Prompt: (prompt) =>
-         `You are an expert in AI prompt engineering. Create an optimized, detailed prompt for the topic "${prompt}".
-The prompt should be structured to produce high-quality, context-aware results in models like Gemini or ChatGPT.
-Include instructions for tone, length, and context if relevant. Output only the final optimized prompt.`,
-
-      Translation: (prompt, language) =>
-         `You are a professional translator with expertise in preserving tone, context, and cultural nuances.
-Translate the following text accurately into ${language}.
-- Maintain the same style, tone, and intent as the original.
-- Adapt idioms or expressions naturally for native speakers.
-- Do not include explanations, quotes, or formatting — output only the translated text.
-Text: "${prompt}"`,
-   };
-
    async function generate() {
       if (!canGenerate) return;
       setIsGenerating(true);
@@ -299,7 +210,6 @@ Text: "${prompt}"`,
             tone,
             language,
             length,
-            temperature,
             result: aiText,
             createdAt: new Date().toISOString(),
             name: queryName || undefined,
@@ -312,14 +222,6 @@ Text: "${prompt}"`,
       } finally {
          setIsGenerating(false);
       }
-   }
-
-   async function regenerate() {
-      if (!result) {
-         showNotification('Nothing to regenerate', 'error');
-         return;
-      }
-      generate();
    }
 
    function handleCopy() {
@@ -361,42 +263,44 @@ Text: "${prompt}"`,
       }
    }
 
-   return (
-      <div className="max-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white customScrollbar">
-         <style>{`
-            .glass-effect {
-               background: rgba(255,255,255,0.03);
-               border: 1px solid rgba(255,255,255,0.08);
-               backdrop-filter: blur(12px);
-            }
-            .shimmer {
-               background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.02) 100%);
-               background-size: 200% 100%;
-               animation: shimmer 1.6s linear infinite;
-            }
-            @keyframes shimmer {
-               0% { background-position: -200% 0 }
-               100% { background-position: 200% 0 }
-            }
-            .tool-active {
-               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-               box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-            }
-            .sidebar-collapsed {
-               width: 80px;
-            }
-            .sidebar-expanded {
-               width: 280px;
-            }
-            .fade-in {
-               animation: fadeIn 0.3s ease-in;
-            }
-            @keyframes fadeIn {
-               from { opacity: 0; transform: translateX(-10px); }
-               to { opacity: 1; transform: translateX(0); }
-            }
-         `}</style>
+   const Select = ({
+      value,
+      onChange,
+      children,
+      placeholder,
+      className = '',
+   }) => (
+      <div className="relative w-full">
+         <select
+            value={value}
+            onChange={onChange}
+            className={`
+            w-full px-4 py-3 
+            bg-black/50 border border-white/10 text-white rounded-xl
+            focus:ring-2 focus:ring-indigo-400 focus:outline-none 
+            appearance-none cursor-pointer
+            transition-all duration-300
+            ${className}
+         `}>
+            {placeholder && <option value="">{placeholder}</option>}
+            {children}
+         </select>
+         <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="w-5 h-5 text-white/60 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200">
+            <path
+               fillRule="evenodd"
+               d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+               clipRule="evenodd"
+            />
+         </svg>
+      </div>
+   );
 
+   return (
+      <div className="max-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white customScrollbar">
          <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
          {/* Toast Notification */}
@@ -577,100 +481,38 @@ Text: "${prompt}"`,
                               activeTool !== 'Name' &&
                               activeTool !== 'Keywords' &&
                               activeTool !== 'Title' && (
-                                 <div className="relative w-full">
-                                    <select
-                                       value={tone}
-                                       onChange={(e) => setTone(e.target.value)}
-                                       className="
-         w-full px-4 py-3 
-         bg-black/40 border border-white/10 text-white rounded-xl
-         focus:ring-2 focus:ring-indigo-400 focus:outline-none 
-         appearance-none cursor-pointer
-         transition-all duration-300
-      ">
-                                       <option>Neutral</option>
-                                       <option>Professional</option>
-                                       <option>Casual</option>
-                                       <option>Friendly</option>
-                                       <option>Formal</option>
-                                    </select>
-
-                                    {/* Custom dropdown icon */}
-                                    <svg
-                                       xmlns="http://www.w3.org/2000/svg"
-                                       viewBox="0 0 20 20"
-                                       fill="currentColor"
-                                       className="w-5 h-5 text-white/60 absolute right-4 top-7 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
-                                       <path
-                                          fillRule="evenodd"
-                                          d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
-                                          clipRule="evenodd"
-                                       />
-                                    </svg>
-
-                                    <style>
-                                       {`
-         select option {
-            background-color: rgba(10, 10, 15, 0.95);
-            color: white;
-            padding: 10px;
-         }
-         select option:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-         }
-      `}
-                                    </style>
-                                 </div>
+                                 <Select
+                                    value={tone}
+                                    onChange={(e) => setTone(e.target.value)}
+                                    placeholder="Select Tone">
+                                    {[
+                                       'Neutral',
+                                       'Professional',
+                                       'Casual',
+                                       'Friendly',
+                                       'Formal',
+                                    ].map((tone) => (
+                                       <option key={tone}>{tone}</option>
+                                    ))}
+                                 </Select>
                               )}
                            {activeTool !== 'Prompt' && (
-                              <div className="relative w-full">
-                                 <select
-                                    value={language}
-                                    onChange={(e) =>
-                                       setLanguage(e.target.value)
-                                    }
-                                    className="
-         w-full px-4 py-3 
-         bg-black/40 border border-white/10 text-white rounded-xl
-         focus:ring-2 focus:ring-indigo-400 focus:outline-none 
-         appearance-none cursor-pointer
-         transition-all duration-300
-      ">
-                                    <option>English</option>
-                                    <option>Gujarati</option>
-                                    <option>Hindi</option>
-                                    <option>Spanish</option>
-                                    <option>French</option>
-                                    <option>German</option>
-                                    <option>Italian</option>
-                                 </select>
-
-                                 {/* Custom dropdown icon */}
-                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    className="w-5 h-5 text-white/60 absolute right-4 top-7 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
-                                    <path
-                                       fillRule="evenodd"
-                                       d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
-                                       clipRule="evenodd"
-                                    />
-                                 </svg>
-
-                                 <style>
-                                    {`
-         select option {
-            background-color: rgba(10, 10, 15, 0.95);
-            color: white;
-            padding: 10px;
-         }
-         select option:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-         }
-      `}
-                                 </style>
-                              </div>
+                              <Select
+                                 value={language}
+                                 onChange={(e) => setLanguage(e.target.value)}
+                                 placeholder="Select Language">
+                                 {[
+                                    'English',
+                                    'Gujarati',
+                                    'Hindi',
+                                    'Spanish',
+                                    'French',
+                                    'German',
+                                    'Italian',
+                                 ].map((language) => (
+                                    <option key={language}>{language}</option>
+                                 ))}
+                              </Select>
                            )}
                            {(activeTool === 'Article' ||
                               activeTool === 'Essay') && (
@@ -681,6 +523,7 @@ Text: "${prompt}"`,
                                     Total words:
                                  </label>
                                  <input
+                                    id="length"
                                     type="text"
                                     min={0}
                                     max={1000}
@@ -688,60 +531,25 @@ Text: "${prompt}"`,
                                     onChange={(e) =>
                                        setLength(Number(e.target.value))
                                     }
-                                    className="w-full rounded-lg px-3 py-3.5 bg-black/40 border border-white/10 text-sm focus:border-indigo-500/50 outline-none"
+                                    className="w-40 px-3 py-3 bg-black/50 border border-white/10 text-white rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none appearance-none cursor-pointer transition-all duration-300"
                                  />
                               </div>
                            )}
-                           <div className="relative w-full">
-                              <select
-                                 value={selectedTemplate || ''}
-                                 onChange={(e) => {
-                                    const template = templates.find(
-                                       (t) => t.id === e.target.value
-                                    );
-                                    if (template) applyTemplate(template);
-                                 }}
-                                 className="
-         w-full px-4 py-3 
-         bg-black/40 border border-white/10 text-white rounded-xl
-         focus:ring-2 focus:ring-indigo-400 focus:outline-none 
-         appearance-none cursor-pointer
-         transition-all duration-300
-      ">
-                                 <option value="">Select Template</option>
-                                 {templates.map((t) => (
-                                    <option key={t.id} value={t.id}>
-                                       {t.title}
-                                    </option>
-                                 ))}
-                              </select>
-
-                              {/* Custom dropdown icon */}
-                              <svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 20 20"
-                                 fill="currentColor"
-                                 className="w-5 h-5 text-white/60 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 group-hover:rotate-180">
-                                 <path
-                                    fillRule="evenodd"
-                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
-                                    clipRule="evenodd"
-                                 />
-                              </svg>
-
-                              <style>
-                                 {`
-         select option {
-            background-color: rgba(10, 10, 15, 0.95);
-            color: white;
-            padding: 10px;
-         }
-         select option:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-         }
-      `}
-                              </style>
-                           </div>
+                           <Select
+                              value={selectedTemplate || ''}
+                              onChange={(e) => {
+                                 const template = templates.find(
+                                    (t) => t.id === e.target.value
+                                 );
+                                 if (template) applyTemplate(template);
+                              }}
+                              placeholder="Select Template">
+                              {templates.map((t) => (
+                                 <option key={t.id} value={t.id}>
+                                    {t.title}
+                                 </option>
+                              ))}
+                           </Select>
                         </div>
                      </div>
                   )}
