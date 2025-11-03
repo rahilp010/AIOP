@@ -54,10 +54,11 @@ export default function AIWriter() {
          desc: 'Grammar checker',
       },
       {
-         name: 'Paragraph',
-         icon: <FaParagraph className="text-lg" />,
-         desc: 'Content blocks',
+         name: 'Paraphrase',
+         icon: <FaBullseye className="text-lg" />,
+         desc: 'Paraphrase text',
       },
+
       {
          name: 'Email',
          icon: <FaEnvelope className="text-lg" />,
@@ -88,13 +89,11 @@ export default function AIWriter() {
          icon: <FaKey className="text-lg" />,
          desc: 'SEO keywords',
       },
-
       {
-         name: 'Paraphrase',
-         icon: <FaBullseye className="text-lg" />,
-         desc: 'Paraphrase text',
+         name: 'Paragraph',
+         icon: <FaParagraph className="text-lg" />,
+         desc: 'Content blocks',
       },
-
       {
          name: 'Title',
          icon: <FaTag className="text-lg" />,
