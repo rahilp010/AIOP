@@ -76,7 +76,45 @@ Translate the following text accurately into ${language}.
 - Adapt idioms or expressions naturally for native speakers.
 - Do not include explanations, quotes, or formatting — output only the translated text.
 Text: "${prompt}"`,
-};
+
+    Paraphrase: (prompt, tone) =>
+        `You are a professional paraphraser. Rephrase the following text into 3 distinct paraphrased versions, keeping the original meaning intact:
+"${prompt}"
+
+Each version should:
+- Be written in a **${tone}** tone.
+- Be concise (1 sentence each).
+- Avoid repetition or hashtags unless they naturally fit the tone.
+- Use emojis where appropriate.
+Return only the 5 paraphrased versions, clearly separated by:
+---`,
+
+    GrammerChecker: (prompt) =>
+        `You are a professional proofreader and grammar expert.
+Review the following text and correct all grammar, spelling, punctuation, and sentence structure errors.
+
+Maintain the original tone, style, and meaning.
+Return the corrected version of the text in given language.
+Do not explain or comment on the corrections — output only the improved text.
+
+Text to check:
+"${prompt}"`,
+
+
+    Summarizer: (prompt) =>
+        `You are an expert summarizer and content analyst.
+Summarize the following text into high-quality summaries while preserving the key ideas, tone, and intent of the original content.
+
+Text:
+"${prompt}"
+
+Guidelines:
+- Write all summaries in given language & tone.
+- Each summary should be concise (1–2 sentences max).
+- Focus on clarity and readability — avoid redundancy or filler words.
+- Use emojis only when they naturally enhance expression and match the tone.
+- Do not include explanations, titles, or hashtags.
+`};
 
 
 

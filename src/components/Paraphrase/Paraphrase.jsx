@@ -20,9 +20,11 @@ import { PiSparkleLight } from 'react-icons/pi';
 import { motion } from 'framer-motion';
 import Navbar from '../Navbar';
 import { callGeminiApi, toolPrompts } from './AI';
+import { MdOutlineArrowBackIosNew, MdSummarize } from 'react-icons/md';
+import { TbTextGrammar } from 'react-icons/tb';
 
 export default function AIWriter() {
-   const [activeTool, setActiveTool] = useState('Article');
+   const [activeTool, setActiveTool] = useState('GrammerChecker');
    const [prompt, setPrompt] = useState('');
    const [tone, setTone] = useState('Neutral');
    const [language, setLanguage] = useState('English');
@@ -34,7 +36,7 @@ export default function AIWriter() {
    const [queryName, setQueryName] = useState('');
    const [showSettings, setShowSettings] = useState(true);
    const [copied, setCopied] = useState(false);
-   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+   const [sidebarExpanded, setSidebarExpanded] = useState(true);
    const [sidebarOpen, setSidebarOpen] = useState(false);
    const [searchQuery, setSearchQuery] = useState('');
    const generateButtonRef = useRef(null);
@@ -47,14 +49,34 @@ export default function AIWriter() {
 
    const tools = [
       {
-         name: 'Article',
-         icon: <FaRegNewspaper className="text-lg" />,
-         desc: 'Write full articles',
+         name: 'GrammerChecker',
+         icon: <TbTextGrammar className="text-lg" />,
+         desc: 'Grammar checker',
+      },
+      {
+         name: 'Paragraph',
+         icon: <FaParagraph className="text-lg" />,
+         desc: 'Content blocks',
       },
       {
          name: 'Email',
          icon: <FaEnvelope className="text-lg" />,
          desc: 'Professional emails',
+      },
+      {
+         name: 'Translation',
+         icon: <FaGlobe className="text-lg" />,
+         desc: 'Language translation',
+      },
+      {
+         name: 'Summarizer',
+         icon: <MdSummarize className="text-lg" />,
+         desc: 'Write full articles',
+      },
+      {
+         name: 'Article',
+         icon: <FaRegNewspaper className="text-lg" />,
+         desc: 'Write full articles',
       },
       {
          name: 'Essay',
@@ -66,30 +88,22 @@ export default function AIWriter() {
          icon: <FaKey className="text-lg" />,
          desc: 'SEO keywords',
       },
+
       {
-         name: 'Name',
-         icon: <FaLightbulb className="text-lg" />,
-         desc: 'Brand names',
-      },
-      {
-         name: 'Paragraph',
-         icon: <FaParagraph className="text-lg" />,
-         desc: 'Content blocks',
-      },
-      {
-         name: 'Prompt',
+         name: 'Paraphrase',
          icon: <FaBullseye className="text-lg" />,
-         desc: 'AI prompts',
+         desc: 'Paraphrase text',
       },
+
       {
          name: 'Title',
          icon: <FaTag className="text-lg" />,
          desc: 'Catchy titles',
       },
       {
-         name: 'Translation',
-         icon: <FaGlobe className="text-lg" />,
-         desc: 'Language translation',
+         name: 'Name',
+         icon: <FaLightbulb className="text-lg" />,
+         desc: 'Brand names',
       },
    ];
 
@@ -106,6 +120,12 @@ export default function AIWriter() {
       Title: 'Generate 10 catchy, attention-grabbing titles for the topic "Your Topic".',
       Translation:
          'Translate the following text accurately into "Your Language".',
+      Paraphrase:
+         'Paraphrase the following text accurately into "Your Language".',
+      GrammerChecker:
+         'Check the following text for grammar errors and provide corrections.',
+      Summarizer:
+         'Summarize the following text accurately into "Your Language".',
    };
 
    const templates = [
@@ -278,6 +298,19 @@ export default function AIWriter() {
       }
    }
 
+   const toneOptionsParaphrase = [
+      { label: '🙂 Friendly', value: 'friendly' },
+      { label: '💎 Luxury', value: 'luxury' },
+      { label: '🎨 Artistic', value: 'artistic' },
+      { label: '😌 Relaxed', value: 'relaxed' },
+      { label: '🧐 Motivational', value: 'motivational' },
+      { label: '😄 Humorous', value: 'humorous' },
+      { label: '💼 Professional', value: 'professional' },
+      { label: '💡 Witty', value: 'witty' },
+      { label: '✨ Charismatic', value: 'charismatic' },
+      { label: '💪🏼 Bold', value: 'bold' },
+   ];
+
    const Select = ({
       value,
       onChange,
@@ -359,18 +392,24 @@ export default function AIWriter() {
                className={`sticky top-16 h-screen flex-shrink-0 transition-all duration-300 ease-in-out 
   glass-effect bg-gradient-to-b from-gray-900/80 via-gray-900/60 to-black/80 border-r border-white/10
   ${sidebarExpanded ? 'w-64' : 'w-18'} ease-in-out`}
-               onMouseEnter={() => setSidebarExpanded(true)}
-               onMouseLeave={() => {
-                  if (searchQuery.length === 0) setSidebarExpanded(false);
-               }}>
+               onMouseEnter={() => setSidebarExpanded(true)}>
                <div className="flex flex-col h-full">
                   {/* Header */}
                   <div className="flex items-center justify-between py-5 px-4 border-b border-white/10 transition-all duration-300 ease-in-out">
-                     <p
-                        className={`text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent
+                     <div className="flex items-center relative w-full">
+                        <p
+                           className={`text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent
         ${!sidebarExpanded && 'hidden'}`}>
-                        Tools
-                     </p>
+                           Tools
+                        </p>
+                        <MdOutlineArrowBackIosNew
+                           size={30}
+                           className={`absolute right-0 ${
+                              !sidebarExpanded && 'hidden'
+                           } hover:scale-110 cursor-pointer p-1.5 bg-gradient-to-r from-indigo-400 to-pink-400 rounded-4xl`}
+                           onClick={() => setSidebarExpanded(false)}
+                        />
+                     </div>
                      {!sidebarExpanded && (
                         <p
                            className={`text-lg font-semibold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent 
@@ -443,11 +482,6 @@ export default function AIWriter() {
                                  )}
                               </button>
                            ))}
-
-                        {/* Divider */}
-                        {templates.length > 0 && (
-                           <div className="border-t border-white/10 my-3"></div>
-                        )}
                      </nav>
                   </div>
                </div>
@@ -495,7 +529,10 @@ export default function AIWriter() {
                               activeTool !== 'Translation' &&
                               activeTool !== 'Name' &&
                               activeTool !== 'Keywords' &&
-                              activeTool !== 'Title' && (
+                              activeTool !== 'Title' &&
+                              activeTool !== 'Paraphrase' &&
+                              activeTool !== 'GrammerChecker' &&
+                              activeTool !== 'Summarizer' && (
                                  <Select
                                     value={tone}
                                     onChange={(e) => setTone(e.target.value)}
@@ -511,30 +548,49 @@ export default function AIWriter() {
                                     ))}
                                  </Select>
                               )}
-                           {activeTool !== 'Prompt' && (
+                           {activeTool === 'Paraphrase' && (
                               <Select
-                                 value={language}
-                                 onChange={(e) => setLanguage(e.target.value)}
-                                 placeholder="Select Language">
-                                 {[
-                                    'English',
-                                    'Gujarati',
-                                    'Hindi',
-                                    'Spanish',
-                                    'French',
-                                    'German',
-                                    'Italian',
-                                 ].map((language) => (
-                                    <option key={language}>{language}</option>
+                                 value={tone}
+                                 onChange={(e) => setTone(e.target.value)}
+                                 placeholder="Select Tone">
+                                 {toneOptionsParaphrase.map((tone) => (
+                                    <option key={tone.value}>
+                                       {tone.label}
+                                    </option>
                                  ))}
                               </Select>
                            )}
+                           {activeTool !== 'Prompt' &&
+                              activeTool !== 'Paraphrase' &&
+                              activeTool !== 'GrammerChecker' &&
+                              activeTool !== 'Summarizer' && (
+                                 <Select
+                                    value={language}
+                                    onChange={(e) =>
+                                       setLanguage(e.target.value)
+                                    }
+                                    placeholder="Select Language">
+                                    {[
+                                       'English',
+                                       'Gujarati',
+                                       'Hindi',
+                                       'Spanish',
+                                       'French',
+                                       'German',
+                                       'Italian',
+                                    ].map((language) => (
+                                       <option key={language}>
+                                          {language}
+                                       </option>
+                                    ))}
+                                 </Select>
+                              )}
                            {(activeTool === 'Article' ||
                               activeTool === 'Essay') && (
                               <div className="flex items-center">
                                  <label
                                     htmlFor="length"
-                                    className="w-32 text-sm">
+                                    className="w-36 text-sm">
                                     Total words :
                                  </label>
                                  <input
