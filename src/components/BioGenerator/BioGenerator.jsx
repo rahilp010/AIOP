@@ -20,7 +20,7 @@ export default function BioGenerator() {
    const [isMobile, setIsMobile] = useState(false);
    const [tone, setTone] = useState('');
 
-   const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE';
+   const GEMINI_API_KEY = 'AIzaSyDzqa2Gaeubhvn5L5ncEVXbEPDgHBjhwmQ';
 
    /** 🌐 Check mobile screen */
    useEffect(() => {
@@ -162,8 +162,13 @@ Separate bios with ---
                <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-8">
                   {/* 🧠 Header */}
                   <div className="text-center space-y-3">
-                     <h1 className="text-5xl font-extrabold bg-gradient-to-br from-white/70 via-white to-black bg-clip-text text-transparent">
-                        Bio Generator
+                     <h1
+                        className="text-4xl text-center  sm:text-3xl md:text-5xl  font-extrabold mb-5 tracking-tight  animate-fade-in-down relative
+         ">
+                        Bio{' '}
+                        <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                           Generator
+                        </span>
                      </h1>
                      <p className="text-gray-300 text-sm sm:text-base">
                         Generate creative, catchy Instagram bios with AI ✨
@@ -245,8 +250,6 @@ Separate bios with ---
                         </div>
                      )}
                   </button>
-
-                  
                   {/* 🧾 Result Section */}
                   <div className="flex flex-col gap-3">
                      {isLoading ? (

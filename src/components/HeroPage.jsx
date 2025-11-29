@@ -6,6 +6,8 @@ import {
    FaPalette,
    FaBars,
    FaTimes,
+   FaTwitter,
+   FaArrowRight,
 } from 'react-icons/fa';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
@@ -13,6 +15,15 @@ import { BiFont } from 'react-icons/bi';
 import { SiNamecheap } from 'react-icons/si';
 import { HiAtSymbol } from 'react-icons/hi2';
 import { IoSparklesOutline } from 'react-icons/io5';
+import {
+   FaFacebook,
+   FaFax,
+   FaGithub,
+   FaInstagram,
+   FaLinkedin,
+   FaX,
+} from 'react-icons/fa6';
+import { LiaLongArrowAltRightSolid } from 'react-icons/lia';
 
 const tools = [
    {
@@ -38,14 +49,14 @@ const tools = [
    },
    {
       icon: <FaPalette size={32} />,
-      title: 'Bio Creator',
+      title: 'AI Bio Creator',
       desc: 'Create personalized and engaging bio content.',
       link: '/bio',
       gradient: 'from-indigo-500 via-purple-500 to-pink-500',
    },
    {
       icon: <FaHashtag size={32} />,
-      title: 'HashTag',
+      title: 'AI HashTag',
       desc: 'Create personalized and engaging bio content.',
       link: '/hashtaggenerator',
       gradient: 'from-amber-200 via-orange-500 to-blue-300',
@@ -219,12 +230,15 @@ export default function HeroPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                <button
-                  className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-pink-500/40 transition-all duration-300 hover:scale-105 active:scale-95 w-full sm:w-auto"
+                  className="px-12 py-4 pr-16 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-full text-lg text-white hover:shadow-2xl hover:shadow-pink-500/40 transition-all duration-300 hover:scale-105 active:scale-95 w-full sm:w-auto relative overflow-hidden font-bold"
                   onClick={handleScroll}>
                   Start Creating
-               </button>
-               <button className="px-8 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl font-semibold text-lg hover:bg-white/20 transition-all duration-300 w-full sm:w-auto">
-                  Learn More
+                  <span className="absolute right-1 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full flex items-center justify-center">
+                     <LiaLongArrowAltRightSolid
+                        size={24}
+                        className="text-indigo-500 font-bold"
+                     />
+                  </span>
                </button>
             </div>
          </section>
@@ -291,21 +305,333 @@ export default function HeroPage() {
             </div>
          </section>
 
-         {/* Footer */}
-         <footer className="border-t border-white/10 py-6 backdrop-blur-lg bg-white/5">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 px-6">
-               <p className="text-gray-500 text-sm text-center md:text-left">
-                  © 2025 TapClick. All rights reserved.
+         {/* Popular This Week */}
+         <section className="pb-20 px-18 relative z-10">
+            <div className="max-w-7xl mx-auto text-center">
+               <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  Popular{' '}
+                  <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                     This Week
+                  </span>
+               </h2>
+               <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-16">
+                  Check out the most trending tools used by our community.
                </p>
-               <div className="flex gap-6 text-sm">
-                  {['Terms', 'Privacy', 'Contact', 'Support'].map((item) => (
-                     <a
-                        key={item}
-                        href="#"
-                        className="text-gray-400 hover:text-white transition-colors">
-                        {item}
-                     </a>
+
+               <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}>
+                  {tools.slice(0, 3).map((tool, index) => (
+                     <motion.div
+                        key={index}
+                        whileHover={{ scale: 1.05, y: -10 }}
+                        transition={{ type: 'spring', stiffness: 200 }}
+                        className="rounded-3xl p-6 bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)] 
+                          relative overflow-hidden">
+                        {/* Animated Liquid Blob */}
+                        <motion.div
+                           className="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-pink-500/20 blur-2xl"
+                           animate={{
+                              scale: [1, 1.2, 1],
+                              opacity: [0.3, 0.6, 0.3],
+                           }}
+                           transition={{
+                              duration: 6,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                           }}
+                        />
+
+                        <div className="relative z-10 text-center">
+                           <div className="flex items-center justify-center mb-4">
+                              {tool.icon}
+                           </div>
+                           <h3 className="text-xl font-semibold text-white">
+                              {tool.title}
+                           </h3>
+                           <p className="text-gray-400 text-sm mt-2">
+                              {tool.desc}
+                           </p>
+                        </div>
+                     </motion.div>
                   ))}
+               </motion.div>
+            </div>
+         </section>
+
+         {/* COMMUNITY LOVE SECTION */}
+         <section className="py-32 px-16 relative z-10">
+            <div className="max-w-7xl mx-auto text-center mb-14">
+               <h2 className="text-4xl md:text-5xl font-bold">
+                  Community{' '}
+                  <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                     Love
+                  </span>
+               </h2>
+               <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                  Real feedback from real creators using TapClick.
+               </p>
+            </div>
+
+            {/* SLIDER CONTAINER */}
+            <div className="overflow-hidden relative">
+               <motion.div
+                  className="flex gap-3"
+                  animate={{ x: ['0%', '-100%'] }}
+                  transition={{
+                     duration: 70,
+                     repeat: Infinity,
+                     ease: 'linear',
+                  }}
+                  whileHover={{ animationPlayState: 'paused' }}
+                  style={{ animationPlayState: 'running' }}>
+                  {[1, 2].map((loop) => (
+                     <div className="flex gap-8" key={loop}>
+                        {[
+                           {
+                              img: 'https://i.pravatar.cc/150?img=32',
+                              name: 'Aarav Sharma',
+                              rating: 5,
+                              comment:
+                                 'The emoji and bio tools helped me grow my social media very fast. This site is a gem!',
+                           },
+                           {
+                              img: 'https://i.pravatar.cc/150?img=15',
+                              name: 'Sophia Patel',
+                              rating: 4,
+                              comment:
+                                 'Beautiful UI, smooth animations and super helpful tools. I use TapClick every day!',
+                           },
+                           {
+                              img: 'https://i.pravatar.cc/150?img=48',
+                              name: 'Rahul Verma',
+                              rating: 5,
+                              comment:
+                                 'Hashtag generator gives perfect hashtags. My reach increased instantly!',
+                           },
+                           {
+                              img: 'https://i.pravatar.cc/150?img=22',
+                              name: 'Emily Carter',
+                              rating: 5,
+                              comment:
+                                 'Love the username generator! Helped me pick the perfect brand username.',
+                           },
+                        ].map((u, index) => (
+                           <motion.div
+                              key={index}
+                              className="min-w-[360px] p-8 rounded-3xl bg-white/10 backdrop-blur-xl
+border border-white/20 shadow-[0_0_35px_rgba(255,255,255,0.15)]
+flex flex-col gap-3 relative overflow-hidden h-[260px]"
+                              whileHover={{ scale: 1.02, y: -5 }}
+                              transition={{ type: 'spring', stiffness: 180 }}>
+                              {/* LIQUID ANIMATION */}
+                              <motion.div
+                                 className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-pink-500/20 blur-2xl rounded-3xl"
+                                 animate={{
+                                    scale: [1, 1.2, 1],
+                                    opacity: [0.3, 0.6, 0.3],
+                                 }}
+                                 transition={{ duration: 6, repeat: Infinity }}
+                              />
+
+                              {/* TOP SECTION */}
+                              <div className="relative z-10 flex items-center gap-4">
+                                 <img
+                                    src={u.img}
+                                    className="w-16 h-16 rounded-full border border-white/30 shadow-lg object-cover"
+                                    alt=""
+                                 />
+                                 <div>
+                                    <h3 className="text-white font-semibold text-xl">
+                                       {u.name}
+                                    </h3>
+                                    <div className="flex">
+                                       {Array.from({ length: u.rating }).map(
+                                          (_, i) => (
+                                             <span
+                                                key={i}
+                                                className="text-yellow-300 text-lg">
+                                                ★
+                                             </span>
+                                          )
+                                       )}
+                                    </div>
+                                 </div>
+                              </div>
+
+                              {/* COMMENT WITH QUOTE */}
+                              <div className="relative z-10 flex-1">
+                                 <span className="text-pink-400 text-4xl leading-none opacity-70 block mb-2">
+                                    ❝
+                                 </span>
+                                 <p className="text-gray-300 text-sm leading-relaxed line-clamp-2 break-words break-normal whitespace-normal">
+                                    {u.comment}
+                                 </p>
+                              </div>
+
+                              {/* GRADIENT LINE */}
+                              <div className="relative z-10 h-[3px] w-full bg-gradient-to-r from-indigo-400 to-pink-400 rounded-full opacity-60" />
+                           </motion.div>
+                        ))}
+                     </div>
+                  ))}
+               </motion.div>
+            </div>
+         </section>
+
+         {/* PROFESSIONAL FOOTER */}
+         <footer className="bg-gradient-to-b from-black/40 to-black/80 border-t border-white/10 pt-16 pb-10 mt-20 backdrop-blur-xl">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-14">
+               {/* Brand */}
+               <div>
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                     TapClick
+                  </h3>
+                  <p className="text-gray-400 text-sm mt-4 leading-relaxed">
+                     Create stunning content, bios, hashtags, and more with our
+                     powerful AI tools. Designed for creators who want speed,
+                     aesthetics, and creativity.
+                  </p>
+
+                  {/* Social Icons */}
+                  <div className="flex gap-4 mt-6">
+                     {[
+                        { name: 'facebook', icon: <FaFacebook /> },
+                        { name: 'github', icon: <FaGithub /> },
+                        { name: 'instagram', icon: <FaInstagram /> },
+                        { name: 'linkedin', icon: <FaLinkedin /> },
+                     ].map((s, i) => (
+                        <a
+                           key={i}
+                           href="#"
+                           className="w-10 h-10 flex items-center justify-center 
+                             bg-white/10 hover:bg-white/20 text-white 
+                             rounded-full transition-all backdrop-blur-xl">
+                           <span className="text-lg">{s.icon}</span>
+                        </a>
+                     ))}
+                  </div>
+               </div>
+
+               {/* Tools */}
+               <div>
+                  <h4 className="text-white font-semibold text-lg mb-4">
+                     Tools
+                  </h4>
+                  <ul className="space-y-3 text-gray-400 text-sm">
+                     <li>
+                        <a href="/fontgenerator" className="hover:text-white">
+                           Font Creator
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/emojigenerator" className="hover:text-white">
+                           Emoji Generator
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/symbol" className="hover:text-white">
+                           Symbol Generator
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/bio" className="hover:text-white">
+                           AI Bio Creator
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/aiwriter" className="hover:text-white">
+                           AI Writer
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+
+               {/* Company */}
+               <div>
+                  <h4 className="text-white font-semibold text-lg mb-4">
+                     Company
+                  </h4>
+                  <ul className="space-y-3 text-gray-400 text-sm">
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           About Us
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Pricing
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Blog
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Careers
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+
+               {/* Support */}
+               <div>
+                  <h4 className="text-white font-semibold text-lg mb-4">
+                     Support
+                  </h4>
+                  <ul className="space-y-3 text-gray-400 text-sm">
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Help Center
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           FAQs
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Contact
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Terms & Conditions
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#" className="hover:text-white">
+                           Privacy Policy
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+
+            {/* Bottom Row */}
+            <div className="border-t border-white/10 mt-12 pt-6">
+               <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+                  <p className="text-gray-500 text-sm">
+                     © {new Date().getFullYear()} TapClick. All rights reserved.
+                  </p>
+
+                  <div className="flex gap-6 text-sm mt-4 md:mt-0">
+                     <a href="#" className="text-gray-400 hover:text-white">
+                        Terms
+                     </a>
+                     <a href="#" className="text-gray-400 hover:text-white">
+                        Privacy
+                     </a>
+                     <a href="#" className="text-gray-400 hover:text-white">
+                        Cookies
+                     </a>
+                  </div>
                </div>
             </div>
          </footer>

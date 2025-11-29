@@ -702,8 +702,13 @@ export default function CoolSymbol() {
          </div>
 
          {/* Header */}
-         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white relative z-10 animate-fade-in-down">
-            Symbol Browser
+         <h1
+            className="text-4xl text-center  sm:text-3xl md:text-5xl  lg:text-6xl  font-bold mb-8 tracking-tight  animate-fade-in-down relative
+         ">
+            Symbol{' '}
+            <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+               Browser
+            </span>
          </h1>
 
          {/* Category Tabs */}

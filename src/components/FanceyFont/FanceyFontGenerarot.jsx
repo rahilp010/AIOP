@@ -55,7 +55,6 @@ const FancyFontGenerator = () => {
       type: 'success',
       visible: false,
    });
-
    const transformations = useMemo(
       () => [
          { name: 'Bold Sans', icon: '𝗕', mapKey: 'sans_bold' },
@@ -184,8 +183,11 @@ const FancyFontGenerator = () => {
 
          {/* Header */}
          <div className="text-center mb-12 mt-10">
-            <h1 className="text-5xl md:text-6xl font-medium text-white mb-3 tracking-tight">
-               Fancy Font Generator
+            <h1 className="text-5xl sm:text-3xl md:text-5xl font-bold mb-4">
+               Fancy{' '}
+               <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                  Font Generator
+               </span>
             </h1>
             <p className="text-gray-400 text-lg">
                Create stylish text instantly — clean & minimal.

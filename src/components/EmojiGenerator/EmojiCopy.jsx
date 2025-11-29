@@ -277,8 +277,13 @@ export default function EmojiCopy() {
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1)_0%,transparent_50%)] animate-pulse"></div>
          </div>
 
-         <h1 className="text-center text-4xl md:text-5xl lg:text-6xl font-bold mb-8 tracking-tight text-white relative animate-fade-in-down">
-            Emoji Browser
+         <h1
+            className="text-4xl text-center  sm:text-3xl md:text-5xl  lg:text-6xl  font-bold mb-8 tracking-tight  animate-fade-in-down relative
+         ">
+            Emoji{' '}
+            <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+               Browser
+            </span>
          </h1>
 
          {/* Search Input */}

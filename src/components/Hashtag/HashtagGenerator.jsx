@@ -24,7 +24,7 @@ export default function HashtagGenerator() {
       return () => window.removeEventListener('resize', checkMobile);
    }, []);
 
-   const GEMINI_API_KEY = 'AIzaSyCDnt2WyRWrZVX2MgSDLmFNWR8kEySNWRE';
+   const GEMINI_API_KEY = 'AIzaSyDzqa2Gaeubhvn5L5ncEVXbEPDgHBjhwmQ';
 
    /** 🔔 Show notification (success/error) */
    const showNotification = (message, type = 'success', duration = 2500) => {
@@ -152,8 +152,11 @@ Return only hashtags separated by spaces, no explanations.`,
                <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-2xl backdrop-blur-xl space-y-6 sm:space-y-8 mt-16 ">
                   {/* Header - Responsive text sizes */}
                   <div className="text-center space-y-2 sm:space-y-3">
-                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-br from-white/60 via-white to-black bg-clip-text text-transparent">
-                        InstaHash
+                     <h1 className="text-3xl sm:text-3xl md:text-5xl font-bold mb-4">
+                        Insta
+                        <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                           Hash
+                        </span>
                      </h1>
                      <p className="text-sm sm:text-base text-gray-300 px-4">
                         Generate unique and trending hashtags powered by AI ✨
