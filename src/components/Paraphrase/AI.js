@@ -14,7 +14,6 @@ async function callGeminiApi(promptText) {
         );
 
         const data = await res.json();
-        console.log('Gemini raw response:', data); // 🧠 log this
 
         if (data.error) {
             throw new Error(data.error.message);

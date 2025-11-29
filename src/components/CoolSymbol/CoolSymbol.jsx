@@ -759,7 +759,7 @@ export default function CoolSymbol() {
          </div>
 
          {/* Animations & Scrollbar */}
-         <style jsx>{`
+         <style>{`
             @keyframes fade-in-down {
                from {
                   opacity: 0;

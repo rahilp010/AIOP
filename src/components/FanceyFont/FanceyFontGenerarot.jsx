@@ -55,43 +55,61 @@ const FancyFontGenerator = () => {
       type: 'success',
       visible: false,
    });
-   const transformations = useMemo(
-      () => [
-         { name: 'Bold Sans', icon: '𝗕', mapKey: 'sans_bold' },
-         { name: 'Bold Italic', icon: '𝗕', mapKey: 'bold_italic' },
-         { name: 'Italic Sans', icon: '𝘪', mapKey: 'sans_italic' },
-         { name: 'Gothic Fraktur', icon: '𝔊', mapKey: 'fraktur' },
-         { name: 'Bubble Circled', icon: 'ⓑ', mapKey: 'circled' },
-         { name: 'Small Caps', icon: 'ꜱ', mapKey: 'smallcaps' },
-         { name: 'Cursive Script', icon: '𝓒', mapKey: 'bold_script' },
-         { name: 'Double Struck', icon: '𝕯', mapKey: 'double_struck' },
-         { name: 'Monospace', icon: '𝙼', mapKey: 'monospace' },
-         { name: 'Sans Serif', icon: '𝖲', mapKey: 'sans' },
-         { name: 'Fancy Fraktur', icon: '𝔊', mapKey: 'fraktur' },
-         { name: 'fullwidth', icon: 'ｈ', mapKey: 'fullwidth' },
-         {
-            name: 'Strikethrough',
-            icon: '-S-',
-            transform: (text) =>
-               text
-                  ?.split('')
-                  .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0336'))
-                  .join(''),
-            previewStyle: { textDecoration: 'line-through' },
-         },
+
+   const normalLower = 'abcdefghijklmnopqrstuvwxyz'.split('');
+   const normalUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+   const normalDigits = '0123456789'.split('');
+
+   // Convert text with a font map entry
+   const convertUsingFont = (text, font) => {
+      return text
+         .split('')
+         .map((char) => {
+            if (normalLower.includes(char))
+               return font.fontLower[normalLower.indexOf(char)] || char;
+
+            if (normalUpper.includes(char))
+               return font.fontUpper[normalUpper.indexOf(char)] || char;
+
+            if (normalDigits.includes(char))
+               return font.fontDigits[normalDigits.indexOf(char)] || char;
+
+            return char;
+         })
+         .join('');
+   };
+
+   const transformations = useMemo(() => {
+      const dynamicFontItems = fontMaps.map((font) => ({
+         name: font.fontName,
+         icon: font.fontLower[1] || '✦',
+         transform: (text) => convertUsingFont(text, font),
+      }));
+
+      return [
+         ...dynamicFontItems,
          {
             name: 'Underline',
             icon: 'U̲',
             transform: (text) =>
                text
-                  ?.split('')
-                  .map((c) => (/[\s\W]/.test(c) ? c : c + '\u0331'))
+                  .split('')
+                  .map((c) => (/[\s]/.test(c) ? c : c + '\u0332'))
                   .join(''),
             previewStyle: { textDecoration: 'underline' },
          },
-      ],
-      []
-   );
+         {
+            name: 'Strikethrough',
+            icon: 'S̶',
+            transform: (text) =>
+               text
+                  .split('')
+                  .map((c) => (/[\s]/.test(c) ? c : c + '\u0336'))
+                  .join(''),
+            previewStyle: { textDecoration: 'line-through' },
+         },
+      ];
+   }, []);
 
    const showNotification = useCallback(
       (message, type = 'success', duration = 3000) => {
@@ -296,7 +314,7 @@ const FancyFontGenerator = () => {
                }
             )}
          </div>
-         <style jsx>{`
+         <style>{`
             @keyframes fade-in-down {
                from {
                   opacity: 0;
