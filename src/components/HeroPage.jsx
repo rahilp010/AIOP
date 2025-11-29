@@ -379,7 +379,7 @@ export default function HeroPage() {
             {/* SLIDER CONTAINER */}
             <div className="overflow-hidden relative">
                <motion.div
-                  className="flex gap-3"
+                  className="flex gap-8"
                   animate={{ x: ['0%', '-100%'] }}
                   transition={{
                      duration: 70,
@@ -425,7 +425,7 @@ export default function HeroPage() {
                               className="min-w-[360px] p-8 rounded-3xl bg-white/10 backdrop-blur-xl
 border border-white/20 shadow-[0_0_35px_rgba(255,255,255,0.15)]
 flex flex-col gap-3 relative overflow-hidden h-[260px]"
-                              whileHover={{ scale: 1.02, y: -5 }}
+                              whileHover={{ scale: 1.01 }}
                               transition={{ type: 'spring', stiffness: 180 }}>
                               {/* LIQUID ANIMATION */}
                               <motion.div
